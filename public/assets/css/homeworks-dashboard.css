@@ -1,0 +1,339 @@
+        :root {
+            --brand: #3b82f6;
+            --brand-600: #2563eb;
+            --brand-700: #1e40af;
+            --ink: #0f172a;
+            --muted: #475569;
+            --bg: #f0f9ff;
+            --card: #ffffff;
+            --border: rgba(0, 0, 0, 0.08);
+            --white: #ffffff;
+            --red: #ef4444;
+            --green: #16a34a;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg);
+            color: var(--ink);
+            padding-top: 55px;
+        }
+
+        .page-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            height: calc(100vh - 55px);
+
+        }
+
+
+
+        .main-content {
+            flex-grow: 1;
+            padding: 25px;
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .page-header {
+            text-align: right;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.2rem;
+            color: var(--brand-700);
+            margin: 0;
+        }
+
+        /* Add Assignment Button Styles */
+        .add-assignment-btn {
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: var(--brand-600);
+            color: var(--white);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            align-self: flex-end; /* Align button to the left in RTL */
+        }
+        
+        .add-assignment-btn:hover {
+            background-color: var(--brand-700);
+            transform: translateY(-2px);
+        }
+
+        /* --- Table and Assignments Section --- */
+        .assignments-section {
+            background-color: var(--card);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            overflow-x: auto;
+        }
+        
+        .assignments-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+        }
+        
+        .assignments-table th, 
+        .assignments-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            font-size: 1rem;
+        }
+
+        .assignments-table th {
+            text-align: right;
+            font-weight: 700;
+            background-color: var(--bg);
+            color: var(--ink);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        
+        .assignments-table tbody tr:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+            transition: background-color 0.2s ease;
+        }
+
+        .status-cell {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--white);
+            text-align: center;
+        }
+
+        .status-badge.in-review {
+            background-color: var(--warning);
+        }
+
+        .status-badge.completed {
+            background-color: var(--success);
+        }
+
+        .progress-text {
+            color: var(--brand-600);
+            font-weight: 600;
+        }
+        
+        .view-btn {
+            background-color: var(--brand);
+            color: var(--white);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        
+        .view-btn:hover {
+            background-color: var(--brand-600);
+            transform: translateY(-1px);
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-container {
+            background-color: var(--card);
+            padding: 30px;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .modal-close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--muted);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .modal-close-btn:hover {
+            color: var(--ink);
+        }
+
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--ink);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background-color: var(--bg);
+            font-family: inherit;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+            color: var(--ink);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--brand-600);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s ease;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .modal-btn.save {
+            background-color: var(--brand-600);
+            color: var(--white);
+        }
+        
+        .modal-btn.cancel {
+            background-color: var(--border);
+            color: var(--muted);
+        }
+        
+        /* Custom Message Box */
+        .message-box {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            display: none;
+            animation: slideIn 0.5s ease-out;
+            font-weight: 600;
+        }
+        
+        .message-box.error {
+            background-color: var(--red);
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 15px;
+            }
+            .assignments-section {
+                padding: 15px;
+            }
+            .assignments-table th,
+            .assignments-table td {
+                padding: 10px;
+            }
+            .add-assignment-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }

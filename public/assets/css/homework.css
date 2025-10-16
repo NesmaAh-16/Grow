@@ -1,0 +1,93 @@
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+
+    :root {
+        --brand: #3b82f6;
+        --brand-600: #2563eb;
+        --brand-700: #1e40af;
+        --ink: #0f172a;
+        --muted: #475569;
+        --bg: #f0f9ff;
+        --card: #ffffff;
+        --border: rgba(0, 0, 0, 0.08);
+        --white: #ffffff;
+        --success: #10b981;
+        --error: #ef4444;
+        --warning: #f59e0b;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+
+    body {
+      margin: 0;
+      font-family: "Cairo", sans-serif;
+      background-color: var(--bg);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow: hidden;
+    padding-top: 55px;
+    }
+    .page-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
+    height: calc(100vh - 55px);}
+
+
+    .main-content {
+            flex-grow: 1; display: flex; align-items: center; justify-content: center;
+            padding: 50px; overflow: hidden;
+            margin-top: 20px;
+        }
+        .homework-card {
+            width: 100%;
+             max-width: 800px;
+              max-height: 90vh;
+               background-color: #ffffff;
+            border-radius: 16px;
+             box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            display: flex;
+             flex-direction: column;
+              overflow: hidden;
+        }
+        .card-header { padding: 20px 30px; border-bottom: 1px solid #e2e8f0; }
+        .card-header h1 { font-size: 26px; color: #1e293b; margin: 0; }
+        .card-header h1 span { color: #2563eb; }
+        .card-body {
+            padding: 20px 30px; flex-grow: 1; display: flex; flex-direction: column; gap: 25px;
+        }
+        .status-table { width: 100%; border-collapse: collapse; }
+        .status-table td { padding: 12px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+        .status-table td:first-child { font-weight: bold; color: #334155; width: 150px; }
+        
+        /* --- Status Colors --- */
+        .status-value { font-weight: bold; }
+        .status-value.not-submitted { color: #ef4444; } 
+        .status-value.pending-grading { color: #f59e0b; }
+
+        .section-title { font-size: 16px; font-weight: bold; color: #1e293b; margin: 0 0 10px 0; }
+        .instructions-text { font-size: 15px; color: #475569; line-height: 1.7; margin: 0; }
+        
+        .card-footer {
+            padding: 15px 30px; border-top: 1px solid #e2e8f0; background-color: #f8fafc;
+        }
+        .add-submission-btn {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 12px; font-size: 16px; font-weight: bold;
+            color: white; background-color: #2563eb; border: none;
+            border-radius: 8px; cursor: pointer; text-decoration: none;
+        }
+        .add-submission-btn:disabled {
+            background-color: #94a3b8;
+            cursor: not-allowed;
+        }
+    

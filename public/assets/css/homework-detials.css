@@ -1,0 +1,396 @@
+
+        :root {
+            --brand: #3b82f6;
+            --brand-600: #2563eb;
+            --brand-700: #1e40af;
+            --ink: #0f172a;
+            --muted: #475569;
+            --bg: #f0f9ff;
+            --card: #ffffff;
+            --border: rgba(0, 0, 0, 0.08);
+            --white: #ffffff;
+            --red: #ef4444;
+            --green: #16a34a;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg);
+            color: var(--ink);
+            padding-top: 55px;
+        }
+
+        .page-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+           height: calc(100vh - 55px);
+
+        }
+
+       
+        .main-content {
+            flex-grow: 1;
+            padding: 25px;
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .page-header {
+            text-align: right;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.2rem;
+            color: var(--brand-700);
+            margin: 0;
+        }
+
+        .details-card {
+            background-color: var(--card);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .detail-label {
+            font-weight: 700;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .detail-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .detail-value .progress-text {
+            color: var(--brand-600);
+        }
+
+        .attachments-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .attachments-list li {
+            background-color: var(--bg);
+            padding: 10px 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid var(--border);
+        }
+        
+        .attachments-list li a {
+            text-decoration: none;
+            color: var(--brand-600);
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .attachments-list li a:hover {
+            color: var(--brand-700);
+        }
+
+        .submissions-section {
+            background-color: var(--card);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            overflow-x: auto;
+        }
+        
+        .submissions-section h2 {
+            font-size: 1.8rem;
+            color: var(--brand-700);
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .submissions-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+        }
+        
+        .submissions-table th, 
+        .submissions-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            font-size: 1rem;
+        }
+
+        .submissions-table th {
+            text-align: right;
+            font-weight: 700;
+            background-color: var(--bg);
+            color: var(--ink);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .submissions-table tbody tr:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+            transition: background-color 0.2s ease;
+        }
+
+        .submissions-table .grade-input {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .submissions-table .view-btn {
+            background-color: var(--brand);
+            color: var(--white);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        
+        .submissions-table .view-btn:hover {
+            background-color: var(--brand-600);
+            transform: translateY(-1px);
+        }
+
+        .edit-assignment-btn {
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: var(--brand-600);
+            color: var(--white);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            align-self: flex-end; 
+            margin-top: 20px;
+        }
+        
+        .edit-assignment-btn:hover {
+            background-color: var(--brand-700);
+            transform: translateY(-2px);
+        }
+
+        .edit-assignment-section {
+            background-color: var(--card);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            display: none; 
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 25px; 
+            animation: fadeIn 0.3s ease-out; 
+        }
+
+        .edit-assignment-section h2 {
+            font-size: 1.8rem;
+            color: var(--brand-700);
+            margin-top: 0;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--ink);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background-color: var(--bg);
+            font-family: inherit;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+            color: var(--ink);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--brand-600);
+        }
+        
+        .file-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        .delete-file-btn {
+            background: none;
+            border: none;
+            color: var(--red);
+            cursor: pointer;
+            font-size: 18px;
+            transition: transform 0.2s ease;
+        }
+        
+        .delete-file-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .edit-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+            margin-top: 10px;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s ease;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .modal-btn.save {
+            background-color: var(--brand-600);
+            color: var(--white);
+        }
+        
+        .modal-btn.cancel {
+            background-color: var(--border);
+            color: var(--muted);
+        }
+        
+        .message-box {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            display: none;
+            animation: slideIn 0.5s ease-out;
+            font-weight: 600;
+        }
+        
+        .message-box.error {
+            background-color: var(--red);
+        }
+        .edithw{
+            text-decoration: none;
+            color: white;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 15px;
+            }
+            .details-card, .submissions-section, .edit-assignment-section {
+                padding: 15px;
+            }
+            .submissions-table th,
+            .submissions-table td {
+                padding: 10px;
+            }
+            .edit-assignment-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .edit-actions {
+                flex-direction: column;
+            }
+            .modal-btn {
+                width: 100%;
+            }
+        }

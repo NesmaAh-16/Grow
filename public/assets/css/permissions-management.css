@@ -1,0 +1,211 @@
+--- START OF FILE permissions-management.css ---
+
+.permissions-card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-top: 2rem;
+}
+
+.permissions-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.permissions-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.permissions-form select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s;
+}
+
+.permissions-form select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.permissions-list-container {
+    margin-top: 2rem;
+    border-top: 1px solid #eee;
+    padding-top: 1.5rem;
+}
+
+.permissions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.permissions-header h2 {
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.select-all-container label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.permissions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.permissions-list li label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background-color: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 5px;
+    border: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.permissions-list li label:hover {
+    background-color: #f1f3f5;
+    border-color: #dee2e6;
+}
+
+.permissions-list input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+.add-permission-section {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.5rem;
+    align-items: center;
+}
+
+.add-permission-section .form-control {
+    flex-grow: 1;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.add-permission-section .form-control:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.btn-add-permission {
+    background: none;
+    border: none;
+    color: #007bff;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    margin-top: 1.5rem;
+    transition: color 0.3s;
+}
+
+.btn-add-permission:hover {
+    color: #0056b3;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+.btn {
+    padding: 12px 25px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+}
+
+.btn-secondary {
+    background-color: #e4e6eb;
+    color: var(--text-color);
+    text-decoration: none !important;
+}
+
+.toast-notification {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 30px;
+    font-size: 17px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s ease-in-out;
+}
+
+.toast-notification.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+.toast-notification.success {
+    background-color: #28a745; 
+}
+
+.toast-notification.error {
+    background-color: #dc3545; 
+}
+
+
+@media (max-width: 768px) {
+    .permissions-list {
+        grid-template-columns: 1fr;
+    }
+
+    .permissions-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .add-permission-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .add-permission-section .btn {
+        width: 100%;
+    }
+}

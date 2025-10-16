@@ -1,6 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AppController;
+use App\Http\Controllers\AuthController;
+
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Teacher\QuizController;
+use App\Http\Controllers\Teacher\LessonController;
+use App\Http\Controllers\Teacher\TeacherController;
+use App\Http\Controllers\Teacher\QuestionController;
+use App\Http\Controllers\Teacher\AssignmentController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +24,175 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
+});*/
+
+
+// الصفحة الرئيسية
+Route::get('/', [AppController::class, 'index'])->name('home');
+
+// إعادة التوجيه حسب الدور
+// في ملف web.php:
+Route::get('/redirect-by-role', function () {
+    if (auth()->check()) {
+        $u = auth()->user();
+        if ($u->hasRole('admin')) {
+            return redirect()->route('admin.dashboard');
+        }
+        if ($u->hasRole('user-admin')) {
+            return redirect()->route('user_admin.dashboard');
+        }
+        if ($u->hasRole('teacher')) {
+            return redirect()->route('teacher.dashboard');
+        }
+        if ($u->hasRole('student')) {
+            return redirect()->route('student.dashboard');
+        }
+    }
+    return redirect()->route('login');
+})->name('role.redirect')->middleware('auth');
+
+
+
+// تسجيل الدخول للضيوف
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
 });
+
+// تسجيل جديد
+//Route::get('/register', [AppController::class, 'showRegister'])->name('register');
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register/student', [AuthController::class, 'registerStudent'])->name('register.student');
+    Route::post('/register/teacher', [AuthController::class, 'registerTeacher'])->name('register.teacher');
+});
+
+
+// لوحة الطالب (المسار الصحيح: /student/dashboard)
+Route::middleware(['auth', 'role:student'])->group(function () {
+    Route::get('/student/dashboard', function () {
+
+        $user = auth()->user();
+        $profile = $user->studentProfile;  // علاقة one-to-one
+
+        return view('subjects', compact('user', 'profile')); // تأكد أن لديك ملف resources/views/subjects.blade.php
+    })->name('student.dashboard');
+
+    // إعدادات الطالب وإشعاراته (استخدم الـ prefix للمسارات الفرعية)
+    Route::prefix('student')->name('student.')->group(function () {
+        Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+        //Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
+    });
+});
+
+
+// لوحة المعلم (المسار الصحيح: /teacher/dashboard)
+Route::middleware(['auth', 'role:teacher'])->group(function () {
+    Route::get(
+        '/teacher/dashboard',
+        [TeacherController::class, 'index']
+        /* function () {
+            return view('teacher');
+        }*/
+    )->name('teacher.dashboard');
+
+    // الدروس
+    Route::get('/lessons', [LessonController::class, 'index'])->name('lessons.index');
+
+    // الواجبات
+    Route::get('/assignments', [AssignmentController::class, 'index'])->name('assignments.index');
+    Route::get('/assignments/create', [AssignmentController::class, 'create'])->name('assignments.create');
+    Route::post('/assignments', [AssignmentController::class, 'store'])->name('assignments.store');
+    Route::get('/assignments/edit', [AssignmentController::class, 'edit'])->name('assignments.edit');
+    Route::put('/assignments/update', [AssignmentController::class, 'update'])->name('assignments.update');
+    Route::delete('/assignments', [AssignmentController::class, 'destroy'])->name('assignments.destroy'); // اختياري
+
+    // quizzes
+    Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
+    Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create'); //first page quiz create
+    //Route::get('/quizzes/createContinue', [QuizController::class, 'createContinue'])->name('quizzes.createContinue'); //second page quiz create
+    Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
+
+    Route::get('/quizzes/{quiz}/questions/createContinue', [QuestionController::class, 'createContinue'])
+        ->whereNumber('quiz')
+        ->name('quizzes.questions.createContinue');
+
+    Route::post('/quizzes/{quiz}/questions', [QuestionController::class, 'store'])
+        ->whereNumber('quiz')
+        ->name('quizzes.questions.store');
+    Route::get('/quizzes/{quiz}/attempt', [\App\Http\Controllers\Teacher\QuizController::class, 'attempt'])
+        ->whereNumber('quiz')->name('quizzes.attempt');
+
+    Route::post('/quizzes/{quiz}/attempt', [\App\Http\Controllers\Teacher\QuizController::class, 'submitAttempt'])
+        ->whereNumber('quiz')->name('quizzes.attempt.submit');
+    Route::get('/quizzes/results', [QuizController::class, 'results'])->name('quizzes.results');
+    Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
+
+
+});
+
+//attempt quizz
+Route::middleware(['auth'])->group(function () {
+
+});
+
+
+// لوحة المدير
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return view('super-admin-dashboard');
+    })->name('admin.dashboard');
+
+    Route::get('/admin/admins', function () {  //إدارة الإداريين
+        return view('admins-management');
+    })->name('admin.admins');
+
+    Route::get('/admin/settings', function () {   //إعدادات النظام
+        return view('system-settings');
+    })->name('admin.system.settings');
+
+    Route::get('/admin/permissions', function () { //إدارة الصلاحيات
+        return view('permissions-management');
+    })->name('admin.permissions');
+
+});
+
+Route::middleware(['auth', 'role:user-admin'])->group(function () {
+    Route::get('/user-admin/dashboard', function () {
+        return view('users-admin-dashboard');
+    })->name('user_admin.dashboard');
+
+});
+
+
+
+
+// إشعارات الطالب و إعداداته
+/*Route::middleware(['auth','role:student'])->prefix('student')->name('student.')->group(function () {
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');          // الإعدادات
+    //Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications'); // الإشعارات
+});*/
+
+Route::post('/register/student', [AuthController::class, 'registerStudent'])->name('register.student');
+Route::post('/register/teacher', [AuthController::class, 'registerTeacher'])->name('register.teacher');
+
+
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
+
+
+// تسجيل الخروج
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+
+/*Route::get('/test-role', function () {
+    if (auth()->check()) {
+        $user = auth()->user();
+        dd($user->email, $user->getRoleNames());
+    }
+    return "Not logged in";
+})->middleware('auth');*/
+
+
+

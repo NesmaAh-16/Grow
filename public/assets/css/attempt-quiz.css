@@ -1,0 +1,219 @@
+    :root {
+      --brand: #3b82f6;
+      --brand-600: #2563eb;
+      --brand-700: #1e40af;
+      --ink: #0f172a;
+      --muted: #475569;
+      --bg: #f0f9ff;
+      --card: #ffffff;
+      --border: rgba(0, 0, 0, 0.08);
+      --white: #ffffff;
+      --red: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Cairo', sans-serif;
+      color: var(--ink);
+      background-color: var(--bg);
+      overflow-x: hidden;
+       height: 100vh;
+       padding-top: 55px;
+      
+    }
+
+    .page-container {
+      display: flex;
+      flex-direction: column;
+
+      overflow: auto;
+      height: calc(100vh - 55px);
+    }
+
+    .main-content {
+      flex-grow: 1;
+      display: flex;
+      padding: 25px;
+      gap: 25px;
+      overflow: hidden;
+      justify-content: center;
+    }
+
+    .quiz-dashboard, .question-area {
+      background-color: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      position: relative;
+      animation: fadeInUp 1s ease both;
+    }
+
+    .quiz-dashboard {
+      flex-basis: 350px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dashboard-header {
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dashboard-header .label {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .dashboard-header .timer {
+      font-size: 32px;
+      font-weight: bold;
+      color: var(--ink);
+      letter-spacing: 2px;
+    }
+
+    .questions-nav-header {
+      font-weight: bold;
+      color: var(--ink);
+      margin: 20px 0 15px 0;
+    }
+
+    .questions-nav {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      flex-grow: 1;
+      align-content: flex-start;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+
+    .q-nav-btn {
+      height: 45px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background-color: var(--bg);
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      font-size: 16px;
+    }
+
+    .q-nav-btn:hover {
+      background-color: #e2e8f0;
+    }
+
+    .q-nav-btn.answered {
+      background-color: var(--brand);
+      border-color: var(--brand-600);
+      color: var(--white);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: auto;
+      font-size: 16px;
+    }
+
+    .question-area {
+      flex-grow: 1;
+      padding: 30px;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .question-block {
+      padding-bottom: 25px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .question-block:last-child {
+      border-bottom: none;
+    }
+
+    .question-text {
+      font-size: 22px;
+      font-weight: bold;
+      color: var(--ink);
+      margin: 0 0 20px 0;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      background-color: var(--bg);
+      transition: all 0.2s ease;
+    }
+
+    .option:hover {
+      transform: translateY(-2px);
+    }
+
+    .option input[type="radio"] {
+      display: none;
+    }
+
+    .option .option-label {
+      height: 22px;
+      width: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .option:has(input:checked) {
+      border-color: var(--brand-600);
+      background-color: #e2e8f0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .option:has(input:checked) .option-label {
+      border-color: var(--brand-600);
+      background-color: var(--brand);
+    }
+
+    .option:has(input:checked) .option-label::after {
+      content: '';
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--white);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }

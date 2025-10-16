@@ -1,0 +1,145 @@
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.toolbar .btn-primary {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.toolbar .btn-primary:hover {
+    background-color: #3a7ac8;
+}
+
+.search-container {
+    position: relative;
+}
+
+.search-container input {
+    padding: 10px 40px 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    width: 250px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-container input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+.search-container i {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: var(--light-text-color);
+}
+
+.table-container {
+    background-color: var(--white-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px var(--shadow-color);
+    overflow-x: auto; 
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: right;
+}
+
+.admin-table th, .admin-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.admin-table thead th {
+    background-color: var(--secondary-color);
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+.badge-role {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 12px;
+    display: inline-block;
+}
+
+.badge-role.admin {
+    background-color: #e0f7de;
+    color: #388e3c;
+}
+
+.badge-role.sub-admin {
+    background-color: #fff0c7;
+    color: #f59e0b;
+}
+
+.btn-action {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    transition: opacity 0.3s;
+}
+
+.btn-action:hover {
+    opacity: 0.8;
+}
+
+.btn-edit {
+    background-color: #eaf2fe;
+    color: #4a90e2;
+    margin-left: 8px;
+}
+
+.btn-delete {
+    background-color: #fdeaea;
+    color: #e74c3c;
+}
+
+.btn-view {
+    background-color: #e0f7de;
+    color: #388e3c;
+}
+
+@media (max-width: 768px) {
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .toolbar .btn-primary {
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .search-container input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}

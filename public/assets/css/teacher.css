@@ -1,0 +1,227 @@
+:root {
+    --brand: #3b82f6;
+    --brand-600: #2563eb;
+    --brand-700: #1e40af;
+    --ink: #0f172a;
+    --muted: #475569;
+    --bg: #f9fafb;
+    --card: #ffffff;
+    --border: rgba(0, 0, 0, 0.1);
+    --success: #10b981;
+    --error: #ef4444;
+    --warning: #f59e0b;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Cairo', sans-serif;
+    background-color: var(--bg);
+    padding-top: 40px;
+
+   
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    height: calc(100vh - 40px); 
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 25px;
+}
+
+.hero {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 28px;
+    color: var(--brand-700);
+    margin-bottom: 10px;
+}
+
+.hero p {
+    color: var(--muted);
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    text-align: center;
+    min-width: 150px;
+}
+
+.stat-number {
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--brand-600);
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.activities {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.section-title {
+    font-size: 22px;
+    color: var(--brand-700);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+}
+
+th {
+    background-color: #f8fafc;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+tr:hover {
+    background-color: #f5f7fa;
+}
+
+.activity-type {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.homework {
+    background-color: #eef2ff;
+    color: var(--brand-600);
+}
+
+.exam {
+    background-color: #fee2e2;
+    color: var(--error);
+}
+
+.announcement {
+    background-color: #ecfdf5;
+    color: var(--success);
+}.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 200px is min width for a button */
+    gap: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px; /* Added margin-bottom for spacing with next section */
+    justify-content: center;
+}
+
+.action-btn {
+    background-color: var(--card);
+    color: var(--brand-700);
+    text-decoration: none;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.3s ease;
+    min-height: 120px; /* Ensures consistent button height */
+}
+
+.action-btn:hover {
+    background-color: var(--brand);
+    color: white;
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+.action-btn i {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.action-btn span {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.action-btn:hover i,
+.action-btn:hover span {
+    color: white;
+}
+
+@media (max-width: 600px) {
+    .quick-actions {
+        grid-template-columns: 1fr; /* Stack buttons on small screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        padding: 20px;
+    }
+    
+    .hero h1 {
+        font-size: 24px;
+    }
+    
+    .stats {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .stat-card {
+        width: 100%;
+    }
+    
+    th, td {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logout-btn span {
+        display: none;
+    }
+    
+    .logout-btn i {
+        margin: 0 !important;
+    }
+}

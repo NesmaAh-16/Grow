@@ -1,0 +1,11 @@
+/* تأكد إن حاوية التوب بار relative */
+.topbar, .navbar, .nav-wrapper { position: relative; }
+
+.notif-menu{
+  position: absolute; right: 1rem; top: 3.2rem;
+  background: #fff; color: #111; width: 320px; max-height: 60vh; overflow: auto;
+  border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,.12);
+  z-index: 9999;
+}
+.badge{ position: absolute; inset-inline-start: 14px; inset-block-start: -6px; font-size: 12px;
+  background: #e11d48; color:#fff; border-radius: 999px; padding: 0 6px; }

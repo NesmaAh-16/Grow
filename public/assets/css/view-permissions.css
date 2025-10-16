@@ -1,0 +1,133 @@
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #f5f7fa;
+    --text-color: #333;
+    --light-text-color: #777;
+    --border-color: #e0e0e0;
+    --white-color: #fff;
+    --shadow-color: rgba(0, 0, 0, 0.05);
+}
+
+.admin-info-card {
+    background-color: var(--white-color);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px var(--shadow-color);
+    display: flex;
+    gap: 30px;
+}
+
+.admin-info-card .info-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-info-card .info-label {
+    font-size: 14px;
+    color: var(--light-text-color);
+    margin-bottom: 4px;
+}
+
+.admin-info-card .info-value {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.permissions-form {
+    background-color: var(--white-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px var(--shadow-color);
+    padding: 25px;
+}
+
+.permissions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.permissions-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.select-all-container label {
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.select-all-container input {
+    margin-left: 8px;
+}
+
+.permissions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.permissions-list li {
+    padding: 15px 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.permissions-list li:last-child {
+    border-bottom: none;
+}
+
+.permissions-list label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.permissions-list input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-left: 15px;
+    accent-color: var(--primary-color);
+}
+
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn {
+    padding: 12px 25px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+}
+
+.btn-primary:hover {
+    background-color: #3a7ac8;
+}
+
+.btn-secondary {
+    background-color: #e4e6eb;
+    color: var(--text-color);
+}
+
+.btn-secondary:hover {
+    background-color: #d8dbdf;
+}

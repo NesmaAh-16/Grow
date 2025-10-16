@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة إداري جديد</title>
+    <link rel="icon" href="assets/images/logo2-removebg-preview.png" type="image/x-icon" width = "15px">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <link rel="stylesheet" href="assets/css/edit-admin.css" />
+    <link rel="stylesheet" href="assets/css/add-admin.css" /> 
+</head>
+<body>
+    <div class="form-container">
+        <header class="form-header">
+            <h1>إضافة إداري جديد</h1>
+        </header>
+        <form class="add-admin-form" action="admins-management.html" method="get">
+            <div class="form-group">
+                <label for="adminName">الاسم الكامل للإداري</label>
+                <input type="text" id="adminName" name="adminName" placeholder="أدخل الاسم الكامل للإداري" required>
+            </div>
+            <div class="form-group">
+                <label for="adminEmail">البريد الإلكتروني</label>
+                <input type="email" id="adminEmail" name="adminEmail" placeholder="أدخل البريد الإلكتروني" required>
+            </div>
+            <div class="form-group">
+                <label for="adminPassword">كلمة المرور</label>
+                <input type="password" id="adminPassword" name="adminPassword" placeholder="أدخل كلمة المرور" required>
+            </div>
+            <div class="form-group">
+                <label for="adminType">نوع الإداري</label>
+                <select id="adminType" name="adminType" required>
+                    <option value="">اختر نوع الإداري</option>
+                    <option value="content-admin">ادمن المحتوى</option>
+                    <option value="user-admin">ادمن المستخدمين</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>الصلاحيات</label>
+                <div class="permissions-grid">
+                    <label class="permission-item">
+                        <input type="checkbox" name="permissions" value="manage-roles"> إدارة الأدوار
+                    </label>
+                    <label class="permission-item">
+                        <input type="checkbox" name="permissions" value="disable-user"> تعطيل مستخدم
+                    </label>
+                    <label class="permission-item">
+                        <input type="checkbox" name="permissions" value="add-user"> إضافة مستخدم
+                    </label>
+                    <label class="permission-item">
+                        <input type="checkbox" name="permissions" value="delete-user"> حذف مستخدم
+                    </label>
+                    <label class="permission-item">
+                        <input type="checkbox" name="permissions" value="view-reports"> عرض التقارير
+                    </label>
+                    <label class="permission-item">
+                        <input type="checkbox" name="permissions" value="manage-exams"> إدارة الامتحانات
+                    </label>
+                    <label class="permission-item">
+                        <input type="checkbox" name="permissions" value="manage-classes"> إدارة الفصول
+                    </label>
+                     <label class="permission-item">
+                        <input type="checkbox" name="permissions" value="manage-content"> إدارة المحتوى
+                    </label>
+                    <label class="permission-item">
+                        <input type="checkbox" name="permissions" value="manage-settings"> إدارة الإعدادات
+                    </label>
+                </div>
+            </div>
+
+            <footer class="form-actions">
+                <button type="submit" class="btn btn-primary">إضافة الإداري</button>
+                <a href="admins-management.html" class="btn btn-secondary">إلغاء</a>
+            </footer>
+        </form>
+    </div>
+</body>
+</html>

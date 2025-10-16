@@ -6,12 +6,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-
+    use Notifiable, HasRoles;
     /**
      * The attributes that are mass assignable.
      *
@@ -42,4 +43,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function studentProfile()
+    {
+        //return $this->hasOne(\App\Models\StudentProfile::class, 'student_id');
+         return $this->hasOne(\App\Models\StudentProfile::class, 'user_id', 'id');
+    }
+
+    public function teacherProfile()
+    {
+        return $this->hasOne(\App\Models\TeacherProfile::class);
+    }
+
+    public function lessons()
+    {
+        return $this->hasMany(\App\Models\Lesson::class, 'teacher_id');
+    }
+
 }
