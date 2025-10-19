@@ -12,6 +12,7 @@ use App\Http\Controllers\Teacher\TeacherController;
 use App\Http\Controllers\Teacher\QuestionController;
 use App\Http\Controllers\Teacher\AssignmentController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Student\StudentDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,6 +88,15 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     });
 });
 
+Route::middleware(['role:teacher|student'])->group(function () {
+    Route::get('/lessons', [LessonController::class, 'index'])->name('lessons.index');
+    Route::get('/lessons/details', [LessonController::class, 'details'])->name('lessons.details');//math
+    Route::get('/lessons/arabic', [LessonController::class, 'arabic'])->name('lessons.arabic');//arabic
+    Route::get('/lessons/english', [LessonController::class, 'english'])->name('lessons.english');//arabic
+    Route::get('/lessons/science', [LessonController::class, 'science'])->name('lessons.science');//arabic
+
+});
+
 
 // لوحة المعلم (المسار الصحيح: /teacher/dashboard)
 Route::middleware(['auth', 'role:teacher'])->group(function () {
@@ -99,15 +109,21 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
     )->name('teacher.dashboard');
 
     // الدروس
-    Route::get('/lessons', [LessonController::class, 'index'])->name('lessons.index');
+
+
 
     // الواجبات
+    // Route::prefix('teacher')->middleware(['auth','role:teacher|admin|user-admin'])->group(function () {
     Route::get('/assignments', [AssignmentController::class, 'index'])->name('assignments.index');
     Route::get('/assignments/create', [AssignmentController::class, 'create'])->name('assignments.create');
     Route::post('/assignments', [AssignmentController::class, 'store'])->name('assignments.store');
-    Route::get('/assignments/edit', [AssignmentController::class, 'edit'])->name('assignments.edit');
-    Route::put('/assignments/update', [AssignmentController::class, 'update'])->name('assignments.update');
-    Route::delete('/assignments', [AssignmentController::class, 'destroy'])->name('assignments.destroy'); // اختياري
+
+    Route::get('/assignments/{assignment}', [AssignmentController::class, 'show'])->name('assignments.show');
+    Route::get('/assignments/{assignment}/edit', [AssignmentController::class, 'edit'])->name('assignments.edit');
+    Route::put('/assignments/{assignment}', [AssignmentController::class, 'update'])->name('assignments.update');
+    Route::delete('/assignments/{assignment}', [AssignmentController::class, 'destroy'])->name('assignments.destroy');
+
+
 
     // quizzes
     Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
@@ -122,12 +138,17 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
     Route::post('/quizzes/{quiz}/questions', [QuestionController::class, 'store'])
         ->whereNumber('quiz')
         ->name('quizzes.questions.store');
+    Route::get('/quizzes/{quiz}/edit', [\App\Http\Controllers\Teacher\QuizController::class, 'edit'])->name('quizzes.edit');
+    Route::delete('/quizzes/{quiz}', [\App\Http\Controllers\Teacher\QuizController::class, 'destroy'])->name('quizzes.destroy');
     Route::get('/quizzes/{quiz}/attempt', [\App\Http\Controllers\Teacher\QuizController::class, 'attempt'])
         ->whereNumber('quiz')->name('quizzes.attempt');
 
     Route::post('/quizzes/{quiz}/attempt', [\App\Http\Controllers\Teacher\QuizController::class, 'submitAttempt'])
         ->whereNumber('quiz')->name('quizzes.attempt.submit');
-    Route::get('/quizzes/results', [QuizController::class, 'results'])->name('quizzes.results');
+
+    /*Route::get('/quizzes/results', [\App\Http\Controllers\Teacher\QuizController::class, 'results'])
+        ->name('quizzes.results');*/
+    Route::get('/quizzes/{quiz}/results', [QuizController::class, 'results'])->name('quizzes.results');
     Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
 
 
@@ -137,6 +158,13 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
 Route::middleware(['auth'])->group(function () {
 
 });
+Route::prefix('')
+    ->middleware(['auth'])
+    ->name('student.')
+    ->group(function () {
+        Route::get('/dashboard', [StudentDashboardController::class, 'index'])
+            ->name('dashboard');
+    });
 
 
 // لوحة المدير
@@ -163,6 +191,17 @@ Route::middleware(['auth', 'role:user-admin'])->group(function () {
     Route::get('/user-admin/dashboard', function () {
         return view('users-admin-dashboard');
     })->name('user_admin.dashboard');
+    Route::get('/user-admin/students', function () { //إدارة الصلاحيات الطلاب
+        return view('students-management');
+    })->name('students-management');
+
+    Route::get('/user-admin/teachers', function () { //إدارة الصلاحيات المعلمين
+        return view('teachers-management');
+    })->name('teachers-management');
+
+    Route::get('/user-admin/approvals', function () { //إدارة الصلاحيات و تاكيد الحسابات
+        return view('account-approval');
+    })->name('account-approval');
 
 });
 

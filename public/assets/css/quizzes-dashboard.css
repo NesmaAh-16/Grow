@@ -121,13 +121,13 @@ body {
 }
 
 .status.active {
-    background-color: #e0f2f1; 
-    color: #00796b; 
+    background-color: #e0f2f1;
+    color: #00796b;
 }
 
 .status.expired {
     background-color: #ffcdd2;
-    color: #c62828; 
+    color: #c62828;
 }
 
 .btn-view {
@@ -155,7 +155,7 @@ body {
     }
 
     .quizzes-table thead {
-        display: none; 
+        display: none;
     }
 
     .quizzes-table, .quizzes-table tbody, .quizzes-table tr, .quizzes-table td {
@@ -199,4 +199,13 @@ body {
     .action-buttons {
         flex-direction: column;
     }
+
 }
+.actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.btn-sm { padding: 6px 10px; border-radius: 10px; font-size: .9rem; text-decoration: none; border: none; cursor: pointer; }
+.btn-edit   { background: #eef6ff; color: #0b63ce; border: 1px solid #cfe3ff; }
+.btn-edit:hover { background:#dfeeff; }
+.btn-delete { background: #ffeef0; color: #b4232a; border:1px solid #ffd6da; }
+.btn-delete:hover { background:#ffdfe3; }
+.btn-view   { background: #2a67f3; color:#fff; }
+.btn-view:hover { background:#255cdc; }

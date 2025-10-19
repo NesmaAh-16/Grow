@@ -7,9 +7,9 @@
     <link rel="icon" href="assets/images/logo2-removebg-preview.png" type="image/x-icon" width = "15px">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    
+
     <link rel="stylesheet" href="assets/css/edit-admin.css" />
-    <link rel="stylesheet" href="assets/css/add-admin.css" /> 
+    <link rel="stylesheet" href="assets/css/add-admin.css" />
 </head>
 <body>
     <div class="form-container">
@@ -33,11 +33,12 @@
                 <label for="adminType">نوع الإداري</label>
                 <select id="adminType" name="adminType" required>
                     <option value="">اختر نوع الإداري</option>
-                    <option value="content-admin">ادمن المحتوى</option>
+                    <option value="content-admin">ادمن
+                    </option>
                     <option value="user-admin">ادمن المستخدمين</option>
                 </select>
             </div>
-            
+
             <div class="form-group">
                 <label>الصلاحيات</label>
                 <div class="permissions-grid">

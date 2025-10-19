@@ -4,30 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة المعلمين - لوحة التحكم</title>
-          <link rel="icon" href="assets/images/logo2-removebg-preview.png" type="image/x-icon" width = "15px">
+          <link rel="icon" href="{{ asset('assets/images/logo2-removebg-preview.png') }}" type="image/x-icon" width = "15px">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel="stylesheet" href="assets/css/super-admin-dashboard.css" />
-    <link rel="stylesheet" href="assets/css/teachers-management.css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/super-admin-dashboard.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/teachers-management.css') }}" />
 </head>
 <body>
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <a class="brand" href="index.html">
+                <a class="brand" href="{{ route('home') }}">
                     <!-- Make sure this path is correct -->
-                    <img class="logo" src="assets/images/logo2-removebg-preview.png" alt="شعار المنصة" />
+                    <img class="logo" src="{{ asset('assets/images/logo2-removebg-preview.png') }}" alt="شعار المنصة" />
                     <!-- Make sure this path is correct -->
-                    <img class="brand-name" src="assets/images/edited_color.png" alt="Grow" />
+                    <img class="brand-name" src="{{ asset('assets/images/edited_color.png') }}" alt="Grow" />
                 </a>
             </div>
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="users-admin-dashboard.html"><i class="fas fa-home"></i> لوحة التحكم</a></li>
-                    <li><a href="students-management.html"><i class="fas fa-user-graduate"></i> إدارة الطلاب</a></li>
-                    <li class="active"><a href="teachers-management.html"><i class="fas fa-chalkboard-teacher"></i> إدارة المعلمين</a></li>
-                    <li><a href="account-approval.html"><i class="fas fa-user-check"></i> الموافقة على الحسابات</a></li>
+                    <li class="active"><a href="{{ route('user_admin.dashboard') }}"><i class="fas fa-home"></i> لوحة التحكم</a></li>
+                    <li><a href="{{ route('students-management') }}"><i class="fas fa-user-graduate"></i> إدارة الطلاب</a></li>
+                    <li><a href="{{ route('teachers-management') }}"><i class="fas fa-chalkboard-teacher"></i> إدارة المعلمين</a></li>
+                    <li><a href="{{ route('account-approval') }}"><i class="fas fa-user-check"></i> الموافقة على الحسابات</a></li>
                 </ul>
             </nav>
         </aside>
@@ -45,10 +45,14 @@
                     <button class="action-btn" title="الإعدادات">
                         <i class="fas fa-cog"></i>
                     </button>
-                    <a href="login.html" class="logout-btn">
+                     <a href="#" class="logout-btn"
+                        onclick ="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="fas fa-sign-out-alt"></i>
                         <span>تسجيل خروج</span>
                     </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none">
+                        @csrf
+                    </form>
                 </div>
             </header>
 

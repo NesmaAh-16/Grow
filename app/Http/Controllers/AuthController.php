@@ -31,7 +31,7 @@ class AuthController extends Controller
         return view('login');
     }
 
-    public function login(Request $r)
+    /*public function login(Request $r)
     {
 
         $role = $r->input('login_as'); // admin | teacher | student
@@ -85,7 +85,60 @@ class AuthController extends Controller
             return redirect()->route('teacher.dashboard');
         return redirect()->route('student.dashboard');
 
+    }*/
+    public function login(Request $r)
+    {
+        $role = $r->input('login_as'); // 'admin' | 'teacher' | 'student'
+
+        if ($role === 'student') {
+            $r->validate([
+                'studentId' => ['required', 'string', 'min:3', 'max:64'],
+                'password' => ['required', 'string', 'min:6'],
+            ]);
+
+            $profile = StudentProfile::with('user')
+                ->where('national_id', $r->studentId)->first();
+
+            if (!$profile || !$profile->user || !Hash::check($r->password, $profile->user->password)) {
+                return back()->withErrors(['studentId' => 'بيانات الطالب غير صحيحة.'])->withInput();
+            }
+
+            $user = $profile->user;
+            if (!$user->hasRole('student')) {
+                return back()->withErrors(['studentId' => 'هذا الحساب ليس طالبًا.']);
+            }
+        } else {
+            $r->validate([
+                'email' => ['required', 'email'],
+                'password' => ['required', 'string', 'min:6'],
+            ]);
+
+            $user = User::where('email', $r->email)->first();
+            if (!$user || !Hash::check($r->password, $user->password)) {
+                return back()->withErrors(['email' => 'البريد أو كلمة المرور غير صحيحة.'])->withInput();
+            }
+
+            // ⚠️ تحقّق حسب الدور المطلوب فقط
+            if ($role === 'admin' && !$user->hasAnyRole(['admin', 'user-admin'])) {
+                return back()->withErrors(['email' => 'هذا الحساب ليس أدمن.']);
+            }
+            if ($role === 'teacher' && !$user->hasRole('teacher')) {
+                return back()->withErrors(['email' => 'هذا الحساب ليس معلّمًا.']);
+            }
+        }
+
+        Auth::login($user);
+
+        // توجيه بعد الدخول حسب الدور الحقيقي للحساب
+        if ($user->hasRole('admin'))
+            return redirect()->route('admin.dashboard');
+        if ($user->hasRole('user-admin'))
+            return redirect()->route('user_admin.dashboard');
+        if ($user->hasRole('teacher'))
+            return redirect()->route('teacher.dashboard');
+        return redirect()->route('student.dashboard');
     }
+
 
     public function showRegister()
     {

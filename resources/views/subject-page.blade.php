@@ -4,41 +4,49 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>الدروس </title>
-  <link rel="icon" href="assets/images/logo2-removebg-preview.png" type="image/x-icon" width = "15px">
+  <link rel="icon" href="{{ asset('assets/images/logo2-removebg-preview.png') }}" type="image/x-icon" width = "15px">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="assets/css/navbar.css">
-  <link rel="stylesheet" href="assets/css/subject-page.css">
-  
+  <link rel="stylesheet" href="{{ asset('assets/css/navbar.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/css/subject-page.css') }}">
+
 </head>
 <body>
     <div class="page-container">
-<nav>
+ <nav>
             <div class="nav-left">
-                <a class="brand" href="index.html">
-                    <img class="logo" src="assets/images/imageedit_2_6635233653.png" alt="شعار المنصة" />
-                    <img class="brand-name" src="assets/images/logomwhite.png" alt="Grow" />
+                <a class="brand" href="{{ route('home') }}">
+                    <img class="logo" src="{{ asset('assets/images/imageedit_2_6635233653.png') }}" alt="شعار المنصة">
+                    <img class="brand-name" src="{{ asset('assets/images/logomwhite.png') }}" alt="Grow">
                 </a>
             </div>
-             <div class="nav-menu">
-          <a href="login.html" class="nav-link">
-            <i class="fas fa-home" style="margin-left: 8px"></i>
-            الصفحة الرئيسية
-          </a>
-          
-        </div>
+
+            <div class="nav-menu">
+                <a href="{{ route('home') }}" class="nav-link">
+                    <i class="fas fa-home" style="margin-left: 8px"></i>
+                    الصفحة الرئيسية
+                </a>
+            </div>
+
             <div class="nav-right">
                 <button class="nav-btn" title="الإشعارات">
                     <i class="fas fa-bell"></i>
                     <span class="badge">3</span>
                 </button>
+
                 <a href="#" class="nav-btn" title="الإعدادات">
                     <i class="fas fa-cog"></i>
                 </a>
-                <a href="index.html" class="logout-btn">
+
+                <a href="#" class="logout-btn"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>تسجيل خروج</span>
                 </a>
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
             </div>
         </nav>
 
@@ -56,7 +64,7 @@
           <div class="progress-bar" id="unit1-progress"></div>
         </div>
       </div>
-      
+
       <a href="lesson.html" class="lesson-link">
         <div class="lesson">
           <input type="checkbox" class="lesson-checkbox" id="lesson1-1">
@@ -69,7 +77,7 @@
           </div>
         </div>
       </a>
-      
+
       <a href="lesson.html" class="lesson-link">
         <div class="lesson">
           <input type="checkbox" class="lesson-checkbox" id="lesson1-2">
@@ -82,7 +90,7 @@
           </div>
         </div>
       </a>
-      
+
       <a href="lesson.html" class="lesson-link">
         <div class="lesson">
           <input type="checkbox" class="lesson-checkbox" id="lesson1-3">
@@ -96,7 +104,7 @@
         </div>
       </a>
     </div>
-    
+
     <div class="unit-card">
       <div class="unit-title">
         <h2>الوحدة الثانية: القواعد النحوية</h2>
@@ -104,7 +112,7 @@
           <div class="progress-bar" id="unit2-progress"></div>
         </div>
       </div>
-      
+
       <a href="lesson.html" class="lesson-link">
         <div class="lesson">
           <input type="checkbox" class="lesson-checkbox" id="lesson2-1">
@@ -117,7 +125,7 @@
           </div>
         </div>
       </a>
-      
+
       <a href="lesson.html" class="lesson-link">
         <div class="lesson">
           <input type="checkbox" class="lesson-checkbox" id="lesson2-2">

@@ -70,7 +70,7 @@
                         <img
                             src="https://www.cappasande.de/wp-content/uploads/2023/05/%D9%86%D8%B4%D8%A3%D8%A9-%D8%A7%D9%84%D9%84%D8%BA%D8%A9-%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%8A%D8%A9.jpg" />
                         <p>الأستاذة: امل عدنان</p>
-                        <a href="subject-page.html">
+                        <a href="{{ route('lessons.arabic') }}">
                             <i class="fas fa-door-open" style="margin-left: 8px"></i>
                             دخول للصف
                         </a>
@@ -79,7 +79,7 @@
                         <h3>اللغة الإنجليزية</h3>
                         <img src="https://successacademy.training/wp-content/uploads/2024/12/preview-1320x933.jpg" />
                         <p>الأستاذة: سارة صالح</p>
-                        <a href="subject-page.html">
+                        <a href="{{ route('lessons.english') }}">
                             <i class="fas fa-door-open" style="margin-left: 8px"></i>
                             دخول للصف
                         </a>
@@ -89,7 +89,7 @@
                         <img
                             src="https://images.for9a.com/thumb/max-800-auto-100-webp/ol/blog/2020/04/06/620x377-51586156952771.jpg" />
                         <p>الأستاذة: نسمة أحمد</p>
-                        <a href="subject-page.html">
+                        <a href="{{ route('lessons.details') }}">
                             <i class="fas fa-door-open" style="margin-left: 8px"></i>
                             دخول للصف
                         </a>
@@ -98,7 +98,7 @@
                         <h3>العلوم العامة</h3>
                         <img src="{{ asset('assets/images/scei2.png') }}" />
                         <p>الأستاذ: محمد علي</p>
-                        <a href="subject-page.html">
+                        <a href="{{ route('lessons.science') }}">
                             <i class="fas fa-door-open" style="margin-left: 8px"></i>
                             دخول للصف
                         </a>

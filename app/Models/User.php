@@ -46,9 +46,17 @@ class User extends Authenticatable
     public function studentProfile()
     {
         //return $this->hasOne(\App\Models\StudentProfile::class, 'student_id');
-         return $this->hasOne(\App\Models\StudentProfile::class, 'user_id', 'id');
+        return $this->hasOne(\App\Models\StudentProfile::class, 'user_id', 'id');
     }
 
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class, 'grade_id');
+    }
+    public function section()
+    {
+        return $this->belongsTo(Section::class, 'section_id');
+    }
     public function teacherProfile()
     {
         return $this->hasOne(\App\Models\TeacherProfile::class);

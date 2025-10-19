@@ -1,13 +1,3 @@
-@if ($errors->any())
-    <div style="background:#fee;color:#900;padding:8px;margin-bottom:10px">
-        <b>Validation failed:</b>
-        <ul>
-            @foreach ($errors->all() as $e)
-                <li>{{ $e }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -90,7 +80,8 @@
                             <select id="grade" name="grade" required>
                                 <option value="" disabled {{ old('grade') ? '' : 'selected' }}>اختر الصف</option>
                                 @for ($g = 1; $g <= 11; $g++)
-                                    <option value="{{ $g }}" {{ old('grade') == $g ? 'selected' : '' }}>الصف
+                                    <option value="{{ $g }}" {{ old('grade') == $g ? 'selected' : '' }}>
+                                        الصف
                                         {{ $g }}</option>
                                 @endfor
                             </select>
@@ -111,20 +102,23 @@
 
                         <div class="form-group">
                             <label for="available_from">تاريخ البدء</label>
-                            <input type="date" id="available_from" name="available_from"
+                            <input type="datetime-local"id="available_from" name="available_from"
                                 value="{{ old('available_from') }}">
                         </div>
 
                         <div class="form-group">
                             <label for="available_to">تاريخ الانتهاء</label>
-                            <input type="date" id="available_to" name="available_to"
+                            <input type="datetime-local" id="available_to" name="available_to"
                                 value="{{ old('available_to') }}">
                         </div>
 
-                        {{-- لو بدك تبقي حقل المحاولات احفظيه باسم attempts و تجاهليه الآن --}}
                         <div class="form-group full-width">
-                            <label for="attempts">عدد المحاولات المسموحة</label>
-                            <input type="number" id="attempts" name="attempts" value="{{ old('attempts', 1) }}">
+                            <label for="attempts_allowed">عدد المحاولات المسموحة</label>
+                            <input type="number" id="attempts_allowed" name="attempts_allowed" min="1"
+                                max="20" step="1" value="{{ old('attempts_allowed', 1) }}">
+                            @error('attempts_allowed')
+                                <div class="field-error">{{ $message }}</div>
+                            @enderror
                         </div>
 
                     </div>

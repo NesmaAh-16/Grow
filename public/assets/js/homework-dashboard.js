@@ -57,7 +57,7 @@
                     messageBox.style.display = 'none';
                 }, 3000);
             }
-            
+
             function populateClassDropdown() {
                 assignmentClassSelect.innerHTML = '';
                 classes.forEach(cls => {
@@ -89,7 +89,7 @@
                     `;
                     tableBody.appendChild(row);
                 });
-                
+
                 document.querySelectorAll('.view-btn').forEach(button => {
                     button.addEventListener('click', () => {
                         showMessage('سيتم عرض تفاصيل هذا الواجب.');
@@ -99,23 +99,23 @@
 
             populateClassDropdown();
             renderAssignments();
-            
+
             addAssignmentBtn.addEventListener('click', () => {
                 assignmentTitleInput.value = '';
                 assignmentDueDateInput.value = '';
                 assignmentFileInput.value = '';
-                
+
                 addAssignmentModal.style.display = 'flex';
             });
-            
+
             closeModalBtn.addEventListener('click', () => {
                 addAssignmentModal.style.display = 'none';
             });
-            
+
             cancelAddBtn.addEventListener('click', () => {
                 addAssignmentModal.style.display = 'none';
             });
-            
+
             window.addEventListener('click', (e) => {
                 if (e.target === addAssignmentModal) {
                     addAssignmentModal.style.display = 'none';
@@ -132,15 +132,15 @@
                     showMessage('الرجاء تعبئة جميع الحقول المطلوبة (عنوان الواجب وتاريخ التسليم).', 'error');
                     return;
                 }
-                
+
                 const newAssignment = {
                     class: selectedClass,
                     title: title,
                     dueDate: dueDate,
-                    submitted: 0, 
-                    totalStudents: 30, 
-                    status: "قيد التصليح", 
-                    file: file ? file.name : null,// Store file name or 
+                    submitted: 0,
+                    totalStudents: 30,
+                    status: "قيد التصليح",
+                    file: file ? file.name : null,// Store file name or
                 };
 
                 assignments.push(newAssignment);

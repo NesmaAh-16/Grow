@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الاختبارات </title>
-    <link rel="icon" href="{{asset('assets/images/logo2-removebg-preview.png') }}" type="image/x-icon" width = "15px">
+    <link rel="icon" href="{{ asset('assets/images/logo2-removebg-preview.png') }}" type="image/x-icon" width = "15px">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="assets/css/navbar.css" />
@@ -69,10 +69,23 @@
                     <tbody>
                         @forelse($quizzes as $q)
                             <tr>
-                                <td>{{ $q->lesson->classroom->name ?? '—' }}</td>
-                                <td>{{ $q->questions_count ?? $q->questions()->count() }}</td>
-                                <td>{{ optional($q->available_from)->format('Y/n/j') ?: '—' }}</td>
-                                <td>{{ optional($q->available_to)->format('Y/n/j') ?: '—' }}</td>
+                                {{-- اسم الصف --}}
+                                <td>
+                                    @if ($q->lesson?->grade)
+                                        الصف {{ $q->lesson->grade }}
+                                    @else
+                                        —
+                                    @endif
+                                </td>
+
+                                {{-- عدد الأسئلة --}}
+                                <td>{{ $q->questions_count }}</td>
+
+                                {{-- التواريخ --}}
+                                <td>{{ optional($q->available_from)->format('Y/m/d') ?: '—' }}</td>
+                                <td>{{ optional($q->available_to)->format('Y/m/d') ?: '—' }}</td>
+
+                                {{-- الحالة --}}
                                 <td>
                                     @php
                                         $now = now();
@@ -88,9 +101,27 @@
                                         {{ $status }}
                                     </span>
                                 </td>
+
                                 <td>
-                                    <a href="{{ route('quizzes.show', $q->id) }}" class="btn btn-view">عرض
-                                        الاختبار</a>
+                                    <div class="actions">
+                                        <a href="{{ route('quizzes.edit', $q->id) }}" class="btn btn-sm btn-edit">
+                                            <i class="fas fa-pen"></i> تعديل
+                                        </a>
+
+                                        <form action="{{ route('quizzes.destroy', $q->id) }}" method="POST"
+                                            style="display:inline-block"
+                                            onsubmit="return confirm('هل أنت متأكد من حذف هذا الاختبار؟ لا يمكن التراجع.');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-delete">
+                                                <i class="fas fa-trash"></i> حذف
+                                            </button>
+                                        </form>
+
+                                        <a href="{{ route('quizzes.show', $q->id) }}" class="btn btn-sm btn-view">
+                                            عرض الاختبار
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -98,6 +129,7 @@
                                 <td colspan="6" class="text-center text-muted">لا توجد اختبارات</td>
                             </tr>
                         @endforelse
+
                     </tbody>
 
                     {{-- <tbody>

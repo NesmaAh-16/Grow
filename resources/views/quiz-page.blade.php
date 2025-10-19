@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="{{ asset('assets/css/navbar.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/quiz-page.css') }}" />
+    
 </head>
 
 <body>
@@ -62,48 +63,63 @@
                     <div class="info-item">
                         <div class="info-item-text">
                             <span class="label">عدد الأسئلة :</span>
-                            <span class="value">10 أسئلة</span>
+                            <span class="value">{{ $quiz->questions_count }} أسئلة</span>
                         </div>
                         <span class="icon">❓</span>
                     </div>
                     <div class="info-item">
                         <div class="info-item-text">
                             <span class="label">الزمن المتاح :</span>
-                            <span class="value">15 دقيقة</span>
+                            <span class="value">{{ $quiz->duration_minutes ?? 0 }}
+                                دقيقة</span>
                         </div>
                         <span class="icon">⏱️</span>
                     </div>
+                    <?php
+
+                    //dd($quiz->attempts_allowed); ?>
                     <div class="info-item">
                         <div class="info-item-text">
                             <span class="label">عدد المحاولات :</span>
-                            <span class="value">محاولة واحدة</span>
+                            @php $a = (int)($quiz->attempts_allowed ?? 1); @endphp
+                            <span class="value">
+                                @if ($a === 1)
+                                    محاولة واحدة
+                                @elseif ($a === 2)
+                                    محاولتان
+                                @else
+                                    {{ $a }} محاولات
+                                @endif
+                            </span>
                         </div>
-                        <span class="icon">🔄</span>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-item-text">
-                            <span class="label">الدرجة :</span>
-                            <span class="value">من 20</span>
+                        <div class="info-item">
+                            <div class="info-item-text">
+                                <span class="label">الدرجة :</span>
+                                <span class="value">من {{ $quiz->total_marks }}</span>
+                            </div>
+                            <span class="icon">⭐</span>
                         </div>
-                        <span class="icon">⭐</span>
                     </div>
-                </div>
 
-                <div class="action-section">
-                    <div class="pledge-section">
-                        <input type="checkbox" id="pledge-checkbox" onchange="toggleButton()" />
-                        <label for="pledge-checkbox">أتعهد بأنني لن أقوم بالغش وسأعتمد على نفسي فقط.</label>
+                    <div class="action-section">
+                        <div class="pledge-section">
+                            <input type="checkbox" id="pledge-checkbox" onchange="toggleButton()" />
+                            <label for="pledge-checkbox">أتعهد بأنني لن أقوم بالغش وسأعتمد على نفسي فقط.</label>
+                        </div>
+                        <a id="start-quiz-btn" class="start-btn pulse-anim"
+                            href="{{ route('quizzes.attempt', $quiz->id) }}"
+                            onclick="if(!document.getElementById('pledge-checkbox').checked){ alert('فعّل التعهّد أولاً'); return false; }">
+                            🚀 ابدأ الاختبار
+                        </a>
                     </div>
-                    <a id="start-quiz-btn" class="start-btn pulse-anim" href="{{ route('quizzes.attempt', $quiz->id) }}"
-                        onclick="if(!document.getElementById('pledge-checkbox').checked){ alert('فعّل التعهّد أولاً'); return false; }">
-                        🚀 ابدأ الاختبار
-                    </a>
                 </div>
-            </div>
         </main>
     </div>
 
     <script src="assets/js/quiz-page.js"></script>
+    <script>
+        window.QUIZ_DURATION_MIN = {{ $quiz->duration_minutes ?? 0 }};
+    </script>
 </body>
 
 </html>

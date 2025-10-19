@@ -23,8 +23,10 @@
             <header class="page-header">
                 <div class="step-indicator">الخطوة 2 من 2</div>
                 <h1>إضافة الأسئلة</h1>
-                <p class="subtitle">اختبار: <b>{{ $quiz->title }}</b> — عدد الأسئلة الحالية:
-                    {{ $quiz->questions_count }}</p>
+                <p class="subtitle">
+                    اختبار: <b>{{ $quiz->title }}</b> — عدد الأسئلة الحالية:
+                    <b id="q-count">{{ $quiz->questions_count ?? 0 }}</b>
+                </p>
             </header>
 
             @if ($errors->any())
@@ -119,7 +121,7 @@
         </main>
     </div>
 
-    <script>
+   {{-- <script>
         let qIndex = 0;
 
         function toggleAnswerArea(sel) {
@@ -191,7 +193,91 @@
                 if (ord) ord.value = (i + 1);
             });
         }
-    </script>
+    </script> --}}
+    <script>
+  // خلي المؤشر يبدأ من عدد الكروت الحالية - 1
+  let qIndex = document.querySelectorAll('#questions-container .question-card').length - 1;
+
+  function updateQuestionCount() {
+    const cnt = document.querySelectorAll('#questions-container .question-card').length;
+    const el  = document.getElementById('q-count');
+    if (el) el.textContent = cnt;
+  }
+
+  // أول ما تفتح الصفحة
+  window.addEventListener('DOMContentLoaded', updateQuestionCount);
+
+  function toggleAnswerArea(sel) {
+    const card = sel.closest('.question-card');
+    const isMC = sel.value === 'mc';
+    card.querySelector('.answer-type-mc').classList.toggle('hidden', !isMC);
+    card.querySelector('.answer-type-tf').classList.toggle('hidden', isMC);
+  }
+
+  function removeQuestion(btn) {
+    const card = btn.closest('.question-card');
+    const container = document.getElementById('questions-container');
+    if (container.children.length === 1) {
+      alert('لا يمكن حذف كل الأسئلة.');
+      return;
+    }
+    card.remove();
+    renumber();
+    updateQuestionCount(); // ← مهم
+  }
+
+  function addQuestion() {
+    qIndex++;
+    const container = document.getElementById('questions-container');
+    const first = container.querySelector('.question-card');
+    const clone = first.cloneNode(true);
+
+    // حدّث العناوين والمفاتيح
+    clone.setAttribute('data-index', qIndex);
+    clone.querySelector('.question-title').textContent = 'السؤال ' + (qIndex + 1);
+
+    // نظّف القيم
+    clone.querySelectorAll('input').forEach(inp => {
+      if (inp.type === 'text') inp.value = '';
+      if (inp.type === 'radio') inp.checked = false;
+    });
+
+    // عدّل الأسماء والـ ids
+    clone.querySelectorAll('[name]').forEach(el => {
+      el.name = el.name.replace(/questions\[\d+\]/g, 'questions[' + qIndex + ']');
+      if (el.id && el.id.startsWith('tf-')) {
+        const base = el.id.split('-')[1]; // true/false
+        el.id = `tf-${base}-${qIndex}`;
+      }
+    });
+
+    // الحالة الافتراضية
+    clone.querySelector('.question-type-select').value = 'mc';
+    clone.querySelector('.answer-type-mc').classList.remove('hidden');
+    clone.querySelector('.answer-type-tf').classList.add('hidden');
+
+    // علم أول خيار صحيح في MC، وصح في TF
+    const mcCorrect = clone.querySelectorAll('.answer-type-mc input[type=radio][name$="[correct]"]');
+    if (mcCorrect.length) mcCorrect[0].checked = true;
+    const tfTrue = clone.querySelector(`#tf-true-${qIndex}`);
+    if (tfTrue) tfTrue.checked = true;
+
+    container.appendChild(clone);
+    renumber();
+    updateQuestionCount(); // ← مهم
+  }
+
+  function renumber() {
+    const cards = document.querySelectorAll('.question-card');
+    cards.forEach((c, i) => {
+      c.querySelector('.question-title').textContent = 'السؤال ' + (i + 1);
+      let ord = c.querySelector('input[name^="questions"][name$="[ord]"]');
+      if (ord) ord.value = (i + 1);
+    });
+  }
+</script>
+
+
 </body>
 
 </html>

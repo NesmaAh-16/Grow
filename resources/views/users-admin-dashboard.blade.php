@@ -21,10 +21,10 @@
             </div>
             <nav class="sidebar-nav">
                 <ul>
-                    <li class="active"><a href="users-dashboard.html"><i class="fas fa-home"></i> لوحة التحكم</a></li>
-                    <li><a href="students-management.html"><i class="fas fa-user-graduate"></i> إدارة الطلاب</a></li>
-                    <li><a href="teachers-management.html"><i class="fas fa-chalkboard-teacher"></i> إدارة المعلمين</a></li>
-                    <li><a href="account-approval.html"><i class="fas fa-user-check"></i> الموافقة على الحسابات</a></li>
+                    <li class="active"><a href="{{ route('user_admin.dashboard') }}"><i class="fas fa-home"></i> لوحة التحكم</a></li>
+                    <li><a href="{{ route('students-management') }}"><i class="fas fa-user-graduate"></i> إدارة الطلاب</a></li>
+                    <li><a href="{{ route('teachers-management') }}"><i class="fas fa-chalkboard-teacher"></i> إدارة المعلمين</a></li>
+                    <li><a href="{{ route('account-approval') }}"><i class="fas fa-user-check"></i> الموافقة على الحسابات</a></li>
                 </ul>
             </nav>
         </aside>
