@@ -4,11 +4,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\AuthController;
 
+use App\Http\Controllers\Auth\OtpController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Teacher\QuizController;
+use App\Http\Controllers\SupportMessageController;
 use App\Http\Controllers\Teacher\LessonController;
+use App\Http\Controllers\StudentActivityController;
 use App\Http\Controllers\Teacher\TeacherController;
+use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Teacher\QuestionController;
 use App\Http\Controllers\Teacher\AssignmentController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -33,8 +37,6 @@ use App\Http\Controllers\Student\StudentDashboardController;
 // الصفحة الرئيسية
 Route::get('/', [AppController::class, 'index'])->name('home');
 
-// إعادة التوجيه حسب الدور
-// في ملف web.php:
 Route::get('/redirect-by-role', function () {
     if (auth()->check()) {
         $u = auth()->user();
@@ -54,12 +56,9 @@ Route::get('/redirect-by-role', function () {
     return redirect()->route('login');
 })->name('role.redirect')->middleware('auth');
 
-
-
-// تسجيل الدخول للضيوف
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
+    Route::post('/login', [AuthController::class, 'attempt'])->name('login.attempt');
 });
 
 // تسجيل جديد
@@ -205,6 +204,18 @@ Route::middleware(['auth', 'role:user-admin'])->group(function () {
 
 });
 
+Route::middleware('auth')->group(function () {
+    // دعم
+    Route::post('/support', [SupportMessageController::class, 'store'])->name('support.store');
+    Route::get('/support', [SupportMessageController::class, 'index'])
+    ->name('support.index');
+    Route::post('/support/{supportMessage}/reply', [SupportMessageController::class, 'reply'])->name('support.reply');
+
+    // نشاط الطالب
+    Route::post('/activity/submit', [StudentActivityController::class, 'submit'])->name('activity.submit');
+    Route::post('/activity/{activity}/grade', [StudentActivityController::class, 'grade'])->name('activity.grade');
+});
+
 
 
 
@@ -218,9 +229,18 @@ Route::post('/register/student', [AuthController::class, 'registerStudent'])->na
 Route::post('/register/teacher', [AuthController::class, 'registerTeacher'])->name('register.teacher');
 
 
-Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->name('password.request');
-Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
+//صفحة نسيت كلمة السر
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showEmailForm'])->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendOtp'])->name('password.email');
 
+// صفحة الرمز
+Route::get('/password/otp', [OtpController::class, 'showOtpForm'])->name('password.otp.show');
+Route::post('/password/otp', [OtpController::class, 'verifyOtp'])->name('password.otp.verify');
+Route::post('/password/otp/resend', [OtpController::class, 'resendOtp'])->name('password.otp.resend');
+
+// صفحة إعادة التعيين بعد نجاح الرمز
+Route::get('/reset-password', [NewPasswordController::class, 'create'])->name('password.reset.custom');
+Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 
 // تسجيل الخروج
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');

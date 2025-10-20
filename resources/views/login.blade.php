@@ -32,6 +32,54 @@
   </header>
 
   <div class="login-container fade-up">
+  <h2 class="delay-1">تسجيل الدخول</h2>
+  <div class="user-type-buttons">
+  <div class="user-type-btn active" data-type="admin">أدمن</div>
+  <div class="user-type-btn" data-type="teacher">معلم</div>
+  <div class="user-type-btn" data-type="student">طالب</div>
+</div>
+
+  @if ($errors->any())
+    <div class="error-message" id="error" style="display:block;">
+      {{ $errors->first() }}
+    </div>
+  @endif
+  {{-- @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif--}}
+
+  <form id="loginForm" class="delay-3" method="POST" action="{{ route('login.attempt') }}">
+    @csrf
+    <input type="hidden" name="login_as" id="login_as" value="admin">
+
+    <div id="emailField">
+      <label for="email">البريد الإلكتروني</label>
+      <input type="email" id="email" name="email" placeholder="example@email.com"
+             value="{{ old('email') }}">
+    </div>
+
+    <div id="idField" style="display:none;">
+      <label for="studentId">رقم الهوية</label>
+      <input type="text" id="studentId" name="studentId" placeholder="رقم الهوية"
+             value="{{ old('studentId') }}">
+    </div>
+
+    <label for="password">كلمة المرور</label>
+    <input type="password" id="password" name="password" placeholder="••••••••">
+
+    <a href="{{ route('password.request') }}" class="forgot-password">نسيت كلمة المرور؟</a>
+    <button type="submit" class="submit-btn">دخول</button>
+  </form>
+</div>
+
+
+ {{-- <div class="login-container fade-up">
     <h2 class="delay-1">تسجيل الدخول</h2>
     <div class="user-type-buttons delay-2">
       <div class="user-type-btn active" data-type="admin">أدمن</div>
@@ -57,7 +105,7 @@
 
       <button type="submit" class="submit-btn">دخول</button>
     </form>
-  </div>
+  </div>--}}
 
 <script src="assets/js/login.js"></script>
 </body>
