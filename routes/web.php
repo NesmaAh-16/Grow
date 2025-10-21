@@ -15,7 +15,11 @@ use App\Http\Controllers\Teacher\TeacherController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Teacher\QuestionController;
 use App\Http\Controllers\Teacher\AssignmentController;
+use App\Http\Controllers\UserAdmin\StudentsController;
+use App\Http\Controllers\UserAdmin\TeachersController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\UserAdmin\ApprovalsController;
+use App\Http\Controllers\UserAdmin\DashboardController;
 use App\Http\Controllers\Student\StudentDashboardController;
 
 /*
@@ -186,7 +190,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 });
 
-Route::middleware(['auth', 'role:user-admin'])->group(function () {
+/*Route::middleware(['auth', 'role:user-admin'])->group(function () {
     Route::get('/user-admin/dashboard', function () {
         return view('users-admin-dashboard');
     })->name('user_admin.dashboard');
@@ -202,6 +206,54 @@ Route::middleware(['auth', 'role:user-admin'])->group(function () {
         return view('account-approval');
     })->name('account-approval');
 
+});*/
+
+Route::middleware(['auth', 'role:user-admin'])
+    ->prefix('user-admin')
+    ->name('user_admin.')
+    ->group(function () {
+
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/users/all', [DashboardController::class, 'allUsers'])
+    ->name('users.all');
+
+    // Students Management
+    Route::get('/students', [StudentsController::class, 'index'])->name('students');
+      // إنشاء طالب جديد
+    Route::get('/students/create', [StudentsController::class, 'create'])->name('students.create');
+    Route::post('/students',        [StudentsController::class, 'store'])->name('students.store');
+
+    // عرض/تعديل/تحديث/حذف
+    Route::get('/students/{user}',        [StudentsController::class, 'show'])->name('students.show');
+    Route::get('/students/{user}/edit',   [StudentsController::class, 'edit'])->name('students.edit');
+    Route::put('/students/{user}',        [StudentsController::class, 'update'])->name('students.update');
+    Route::delete('/students/{user}',     [StudentsController::class, 'destroy'])->name('students.delete');
+
+    Route::post('/students/{user}/activate', [StudentsController::class, 'activate'])->name('students.activate');
+    Route::post('/students/{user}/deactivate', [StudentsController::class, 'deactivate'])->name('students.deactivate');
+
+
+    // Teachers Management
+    Route::get('/teachers', [TeachersController::class, 'index'])->name('teachers');
+     // إنشاء
+    Route::get('/teachers/create', [TeachersController::class, 'create'])->name('teachers.create');
+    Route::post('/teachers',        [TeachersController::class, 'store'])->name('teachers.store');
+
+    // عرض/تعديل/تحديث/حذف
+    Route::get('/teachers/{user}',        [TeachersController::class, 'show'])->name('teachers.show');
+    Route::get('/teachers/{user}/edit',   [TeachersController::class, 'edit'])->name('teachers.edit');
+    Route::put('/teachers/{user}',        [TeachersController::class, 'update'])->name('teachers.update');
+    Route::delete('/teachers/{user}', [TeachersController::class, 'destroy'])
+    ->name('teachers.delete');
+    //تعطيل و تفعيل
+    Route::post('/teachers/{user}/activate', [TeachersController::class, 'activate'])->name('teachers.activate');
+    Route::post('/teachers/{user}/deactivate', [TeachersController::class, 'deactivate'])->name('teachers.deactivate');
+
+    // Account Approvals
+    Route::get('/approvals', [ApprovalsController::class, 'index'])->name('approvals');
+    Route::post('/approvals/{user}/approve', [ApprovalsController::class, 'approve'])->name('approvals.approve');
+    Route::post('/approvals/{user}/reject', [ApprovalsController::class, 'reject'])->name('approvals.reject');
 });
 
 Route::middleware('auth')->group(function () {
