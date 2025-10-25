@@ -1,8 +1,5 @@
 <?php
-
-// app/Models/StudentActivity.php
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Model;
 
 class StudentActivity extends Model

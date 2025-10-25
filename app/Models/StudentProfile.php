@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class StudentProfile extends Model
 {
     protected $table = 'student_profiles';
-    protected $fillable = ['user_id', 'national_id', 'grade', 'semester'];
-
+    protected $fillable = ['user_id', 'national_id', 'grade', 'semester','birth_date'];
+    protected $casts = [
+        'birth_date' => 'date',
+    ];
     public function user()
     {
-        //
-        //return $this->belongsTo(User::class, 'user_id');
         return $this->belongsTo(\App\Models\User::class, 'user_id', 'id');
     }
 
@@ -36,27 +36,12 @@ class StudentProfile extends Model
         return $n ? ('الصف ' . ($map[$n] ?? (string) $n)) : 'الصف غير محدد';
     }
 
-    public function getSemesterArabicAttribute(): string
-    {
-        $raw = trim((string) $this->semester);
-
-        // أرقام
-        if ($raw === '1')
-            return 'الفصل الأول';
-        if ($raw === '2')
-            return 'الفصل الثاني';
-
-
-        $low = mb_strtolower($raw);
-        if (in_array($low, ['1st', 'first', 'term1', 't1']))
-            return 'الفصل الأول';
-        if (in_array($low, ['2nd', 'second', 'term2', 't2']))
-            return 'الفصل الثاني';
-
-        // عربي مباشر إن كان مخزّن جاهزًا
-        if ($raw !== '')
-            return $raw;
-
-        return 'الفصل غير محدد';
-    }
+    public function getSemesterArabicAttribute()
+{
+    return match ((int) $this->semester) {
+        1 => 'الفصل الأول',
+        2 => 'الفصل الثاني',
+        default => 'الفصل الأول', // ← الديفولت الحقيقي
+    };
+}
 }

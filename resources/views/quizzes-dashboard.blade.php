@@ -1,3 +1,21 @@
+@if (session('ok'))
+  <div class="alert"
+       style="background:#e6ffed;border:1px solid #b4f8c8;padding:10px;border-radius:8px;color:#1a7f37;margin-bottom:10px;">
+    {{ session('ok') }}
+  </div>
+@endif
+
+@if ($errors->any())
+  <div class="alert"
+       style="background:#fdecec;border:1px solid #f5c2c7;padding:10px;border-radius:8px;color:#b02a37;margin-bottom:10px;">
+    <ul style="margin:0">
+      @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+      @endforeach
+    </ul>
+  </div>
+@endif
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -29,13 +47,12 @@
 
             </div>
             <div class="nav-right">
-                <button class="nav-btn" title="الإشعارات">
+                {{-- - <button class="nav-btn" title="الإشعارات">
                     <i class="fas fa-bell"></i>
                     <span class="badge">3</span>
                 </button>
                 <a href="#" class="nav-btn" title="الإعدادات">
-                    <i class="fas fa-cog"></i>
-                </a>
+                    <i class="fas fa-cog"></i>--}}
                 <a href="#" class="logout-btn"
                     onclick ="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="fas fa-sign-out-alt"></i>
@@ -69,7 +86,6 @@
                     <tbody>
                         @forelse($quizzes as $q)
                             <tr>
-                                {{-- اسم الصف --}}
                                 <td>
                                     @if ($q->lesson?->grade)
                                         الصف {{ $q->lesson->grade }}
@@ -78,14 +94,11 @@
                                     @endif
                                 </td>
 
-                                {{-- عدد الأسئلة --}}
                                 <td>{{ $q->questions_count }}</td>
 
-                                {{-- التواريخ --}}
                                 <td>{{ optional($q->available_from)->format('Y/m/d') ?: '—' }}</td>
                                 <td>{{ optional($q->available_to)->format('Y/m/d') ?: '—' }}</td>
 
-                                {{-- الحالة --}}
                                 <td>
                                     @php
                                         $now = now();
@@ -132,16 +145,6 @@
 
                     </tbody>
 
-                    {{-- <tbody>
-                        <tr>
-                            <td>السابع</td>
-                            <td>15</td>
-                            <td>2025/8/1</td>
-                            <td>2025/8/8</td>
-                            <td><span class="status active">نشط</span></td>
-                            <td><a href="{{ route('quizzes.show', ['quiz' => $q->id])}}" class="btn btn-view">عرض الاختبار</a>@endforeach</td>
-                        </tr>
-                    </tbody> --}}
                 </table>
             </section>
 
@@ -149,10 +152,7 @@
                 <a href="{{ route('quizzes.create') }}" class="btn btn-primary">
                     <i class="fas fa-plus"></i><span>إضافة اختبار جديد</span>
                 </a>
-                <button class="btn btn-secondary">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>لحصر النتائج بالكامل</span>
-                </button>
+
             </section>
         </main>
     </div>

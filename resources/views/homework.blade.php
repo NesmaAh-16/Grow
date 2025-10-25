@@ -15,16 +15,14 @@
     />
     <link rel="stylesheet" href="assets/css/navbar.css">
     <link rel="stylesheet" href="assets/css/homework.css">
-  
+
 </head>
 <body>
   <div class="page-container">
   <nav>
             <div class="nav-left">
                 <a class="brand" href="index.html">
-                    <!-- Make sure this path is correct -->
                     <img class="logo" src="assets/images/imageedit_2_6635233653.png" alt="شعار المنصة" />
-                    <!-- Make sure this path is correct -->
                     <img class="brand-name" src="assets/images/logomwhite.png" alt="Grow" />
                 </a>
             </div>
@@ -33,16 +31,15 @@
             <i class="fas fa-home" style="margin-left: 8px"></i>
             الصفحة الرئيسية
           </a>
-          
+
         </div>
             <div class="nav-right">
-                <button class="nav-btn" title="الإشعارات">
+                {{-- - <button class="nav-btn" title="الإشعارات">
                     <i class="fas fa-bell"></i>
                     <span class="badge">3</span>
                 </button>
                 <a href="#" class="nav-btn" title="الإعدادات">
-                    <i class="fas fa-cog"></i>
-                </a>
+                    <i class="fas fa-cog"></i>--}}
                 <a href="login.html" class="logout-btn">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>تسجيل خروج</span>

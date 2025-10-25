@@ -15,13 +15,11 @@ class SimpleAlert extends Notification
         public ?string $url = null
     ) {}
 
-    // قنوات الإرسال: قاعدة بيانات فقط
     public function via(object $notifiable): array
     {
         return ['database'];
     }
 
-    // ما يُخزّن في جدول notifications
     public function toDatabase(object $notifiable): array
     {
         return [

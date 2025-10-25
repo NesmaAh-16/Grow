@@ -18,7 +18,6 @@
 
 <body>
     <div class="dashboard-container">
-        {{-- Sidebar --}}
         <aside class="sidebar">
             <div class="sidebar-header">
                 <a class="brand" href="{{ route('home') }}">
@@ -47,8 +46,6 @@
                 </ul>
             </nav>
         </aside>
-
-        {{-- Main --}}
         <main class="main-content">
             <header class="main-header">
                 <div class="header-title">
@@ -67,13 +64,11 @@
                 <form method="GET" action="{{ route('user_admin.users.all') }}"
                     style="display: flex; gap: 8px; align-items: center; flex-wrap: nowrap;">
 
-                    {{-- زر تطبيق --}}
                     <button type="submit"
                         style="padding:10px 16px; border:0; border-radius:10px; background:#0d6efd; color:#fff; flex-shrink:0;">
                         تطبيق
                     </button>
 
-                    {{-- الحالة --}}
                     <select name="status"
                         style="padding:10px; border:1px solid #e3e6ef; border-radius:10px; min-width:120px; flex-shrink:0;">
                         <option value="">كل الحالات</option>
@@ -83,7 +78,6 @@
                         <option value="pending" @selected(request('status') === 'pending')>pending</option>
                     </select>
 
-                    {{-- النوع --}}
                     <select name="type"
                         style="padding:10px; border:1px solid #e3e6ef; border-radius:10px; min-width:120px; flex-shrink:0;">
                         <option value="">كل الأنواع</option>
@@ -91,7 +85,6 @@
                         <option value="teacher" @selected(request('type') === 'teacher')>معلم</option>
                     </select>
 
-                    {{-- حقل البحث (يتوسع لكن له حدّ) --}}
                     <div style="flex:1; position:relative; max-width:350px;">
                         <input type="text" name="q" value="{{ request('q') }}"
                             placeholder="بحث بالاسم أو البريد أو رقم الهوية"
@@ -102,7 +95,6 @@
 
                 </form>
             </section>
-            {{-- الجدول --}}
             <section class="table-section">
                 <div class="table-wrapper">
                     <table class="table">
@@ -123,14 +115,18 @@
                                     <td>{{ $u->name }}</td>
                                     <td>{{ $u->email }}</td>
                                     <td>
-                                        @if ($u->user_type === 'student' || (method_exists($u, 'hasRole') && $u->hasRole('student')) || $u->studentProfile)
-                                            طالب
-                                        @elseif($u->user_type === 'teacher' || (method_exists($u, 'hasRole') && $u->hasRole('teacher')) || $u->teacherProfile)
-                                            معلم
-                                        @else
-                                            -
-                                        @endif
-                                    </td>
+    @php
+        // نعطي أولوية: أدمن > أدمن المستخدمين > معلم > طالب
+        $typeLabel =
+            ($u->hasRole('admin') ? 'أدمن النظام' :
+            ($u->hasRole('user-admin') ? 'أدمن المستخدمين' :
+            (
+                ($u->user_type === 'teacher' || $u->hasRole('teacher') || $u->teacherProfile) ? 'معلم' :
+                (($u->user_type === 'student' || $u->hasRole('student') || $u->studentProfile) ? 'طالب' : '-')
+            )));
+    @endphp
+    {{ $typeLabel }}
+</td>
 
                                     <td>{{ $u->status ?? '-' }}</td>
                                     <td>{{ $u->created_at?->format('Y-m-d H:i') }}</td>
@@ -144,7 +140,6 @@
                     </table>
                 </div>
 
-                {{-- Pagination --}}
                 <div style="margin-top:12px;display:flex;justify-content:flex-end">
                     {{ $users->appends(request()->query())->links() }}
                 </div>

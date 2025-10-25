@@ -44,16 +44,6 @@
       {{ $errors->first() }}
     </div>
   @endif
-  {{-- @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif--}}
-
   <form id="loginForm" class="delay-3" method="POST" action="{{ route('login.attempt') }}">
     @csrf
     <input type="hidden" name="login_as" id="login_as" value="admin">

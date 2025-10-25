@@ -1,4 +1,3 @@
-{{-- resources/views/courses/math.blade.php --}}
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -121,7 +120,6 @@
 
 <body>
     <div class="page-container">
-        {{-- شريطك العلوي --}}
         <nav>
             <div class="nav-left">
                 <a class="brand" href="{{ route('home') }}">
@@ -134,9 +132,12 @@
                     الرئيسية</a>
             </div>
             <div class="nav-right">
-                <button class="nav-btn" title="الإشعارات"><i class="fas fa-bell"></i><span
-                        class="badge">3</span></button>
-                <a href="#" class="nav-btn" title="الإعدادات"><i class="fas fa-cog"></i></a>
+                {{-- - <button class="nav-btn" title="الإشعارات">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <a href="#" class="nav-btn" title="الإعدادات">
+                    <i class="fas fa-cog"></i>--}}
                 <a href="#" class="logout-btn"
                     onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                     <i class="fas fa-sign-out-alt"></i><span>تسجيل خروج</span>
@@ -149,7 +150,6 @@
             <h1 class="title">الرياضيات</h1>
             <div class="subtitle">الأستاذ/ة {{ auth()->user()->name ?? '—' }} · الصف الحادي عشر</div>
 
-            {{-- الوحدة 1: الجبر --}}
             <section class="unit">
                 <div class="unit-head">الوحدة الأولى: الجبر</div>
                 <div class="divider"></div>
@@ -188,7 +188,6 @@
                 </article>
             </section>
 
-            {{-- الوحدة 2: الهندسة --}}
             <section class="unit">
                 <div class="unit-head">الوحدة الثانية: الهندسة</div>
                 <div class="divider"></div>
@@ -227,7 +226,6 @@
                 </article>
             </section>
 
-            {{-- الوحدة 3: التفاضل --}}
             <section class="unit">
                 <div class="unit-head">الوحدة الثالثة: التفاضل</div>
                 <div class="divider"></div>

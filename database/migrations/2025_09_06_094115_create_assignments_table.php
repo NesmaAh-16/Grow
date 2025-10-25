@@ -9,7 +9,7 @@ return new class extends Migration {
     {
 
         if (\Illuminate\Support\Facades\Schema::hasTable('assignments')) {
-            return; // الجدول موجود، لا تعمل شيء
+            return; 
         }
 
         Schema::create('assignments', function (Blueprint $t) {

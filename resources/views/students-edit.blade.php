@@ -78,52 +78,46 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('user_admin.teachers.update', $user->id) }}" class="card-form"
-                    style="display:grid;gap:12px">
-                    @csrf @method('PUT')
+                <form method="POST" action="{{ route('user_admin.students.update', $user->id) }}" class="card-form" style="display:grid;gap:12px">
+    @csrf
+    @method('PUT')
 
-                    <div>
-                        <label>الاسم</label>
-                        <input name="name" class="input" value="{{ old('name', $user->name) }}" required>
-                    </div>
+    <div>
+        <label>الاسم</label>
+        <input name="name" class="input" value="{{ old('name', $user->name) }}" required>
+    </div>
 
-                    <div>
-                        <label>البريد الإلكتروني</label>
-                        <input type="email" name="email" class="input" value="{{ old('email', $user->email) }}"
-                            required>
-                    </div>
+    <div>
+        <label>البريد الإلكتروني</label>
+        <input type="email" name="email" class="input" value="{{ old('email', $user->email) }}" required>
+    </div>
 
-                    <div>
-                        <label>رقم الهوية</label>
-                        <input name="national_id" class="input" value="{{ old('national_id', $user->national_id) }}"
-                            required>
-                    </div>
+    <div>
+        <label>رقم الهوية</label>
+        <input name="national_id" class="input" value="{{ old('national_id', $user->national_id) }}">
+    </div>
 
-                    <div>
-                        <label>التخصص</label>
-                        <input name="specialty" class="input"
-                            value="{{ old('specialty', optional($user->teacherProfile)->specialty) }}" required>
-                    </div>
+    <div>
+        <label>الصف</label>
+        <input name="grade" class="input" value="{{ old('grade', $grade) }}" placeholder="مثال: التاسع / العاشر / 10">
+        {{-- إن حبيت Dropdown لاحقًا بنزبطه --}}
+    </div>
 
-                    <div>
-                        <label>تاريخ الميلاد</label>
-                        <input type="date" name="birthdate" class="input"
-                            value="{{ old('birthdate', optional($user->teacherProfile)->birthdate) }}">
-                    </div>
+    <div>
+        <label>الحالة</label>
+        <select name="status" class="input" required>
+            <option value="active"   {{ old('status', $user->status) === 'active' ? 'selected' : '' }}>مفعّل</option>
+            <option value="pending"  {{ old('status', $user->status) === 'pending' ? 'selected' : '' }}>بانتظار</option>
+            <option value="inactive" {{ old('status', $user->status) === 'inactive' ? 'selected' : '' }}>غير مفعّل</option>
+            <option value="blocked"  {{ old('status', $user->status) === 'blocked' ? 'selected' : '' }}>محظور</option>
+        </select>
+    </div>
 
-                    <label>الحالة</label>
-                    <select name="status" class="input" required>
-                        <option value="active">مفعّل</option>
-                        <option value="pending" selected>بانتظار</option>
-                        <option value="inactive">غير مفعّل</option>
-                        <option value="blocked">محظور</option>
-                    </select>
-
-                    <div style="display:flex;gap:8px">
-                        <button class="btn btn-primary" type="submit"><i class="fas fa-save"></i> حفظ</button>
-                        <a href="{{ route('user_admin.teachers') }}" class="btn btn-secondary">إلغاء</a>
-                    </div>
-                </form>
+    <div style="display:flex;gap:8px">
+        <button class="btn btn-primary" type="submit"><i class="fas fa-save"></i> حفظ</button>
+        <a href="{{ route('user_admin.students') }}" class="btn btn-secondary">إلغاء</a>
+    </div>
+</form>
 
             </section>
         </main>

@@ -26,4 +26,5 @@ class AssignmentSubmission extends Model
     {
         return $this->belongsTo(\App\Models\User::class, 'student_id');
     }
+
 }

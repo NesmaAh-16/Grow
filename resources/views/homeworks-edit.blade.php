@@ -145,9 +145,12 @@
                 </a>
             </div>
             <div class="nav-right">
-                <button class="nav-btn" title="الإشعارات"><i class="fas fa-bell"></i><span
-                        class="badge">3</span></button>
-                <a href="#" class="nav-btn" title="الإعدادات"><i class="fas fa-cog"></i></a>
+                {{-- - <button class="nav-btn" title="الإشعارات">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <a href="#" class="nav-btn" title="الإعدادات">
+                    <i class="fas fa-cog"></i>--}}
                 <a href="#" class="logout-btn"
                     onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                     <i class="fas fa-sign-out-alt"></i><span>تسجيل خروج</span>
@@ -209,7 +212,6 @@
                         <div class="form-group full-width">
                             <label>المرفقات الحالية</label>
                             @forelse(($assignment->attachments ?? collect()) as $att)
-                                {{-- سطور المرفق --}}
                             @empty
                                 <input class="inp readonly" type="text" value="لا توجد مرفقات." readonly>
                             @endforelse

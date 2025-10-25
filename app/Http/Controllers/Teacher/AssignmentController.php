@@ -6,26 +6,28 @@ use App\Http\Controllers\Controller;
 use App\Models\Assignment;
 use App\Models\Lesson;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AssignmentController extends Controller
 {
-    // قائمة الواجبات
     public function index()
     {
-        $assignments = \App\Models\Assignment::query()
-        ->with(['lesson:id,grade,teacher_id'])      // الصف
-        ->withCount('submissions')                  // عدد الطلاب المسلّمين
-        ->whereHas('lesson', fn($q) => $q->where('teacher_id', auth()->id()))
-        ->latest()
-        ->orderByDesc('due_at')
-        ->get();
+        $assignments = Assignment::query()
+            ->with(['lesson:id,grade,teacher_id'])
+            ->withCount('submissions')
+            ->whereHas('lesson', fn($q) => $q->where('teacher_id', auth()->id()))
+            ->latest()
+            ->orderByDesc('due_at')
+            ->get();
 
         return view('homeworks-dashboard', compact('assignments'));
     }
 
     public function show(Assignment $assignment)
     {
-        $assignment->loadMissing('lesson');
+        $assignment->loadMissing(['lesson', 'attachments'])
+                   ->loadCount('submissions');
+
         abort_unless($assignment->lesson && $assignment->lesson->teacher_id === auth()->id(), 403);
 
         return view('homework-detials', compact('assignment'));
@@ -36,36 +38,33 @@ class AssignmentController extends Controller
         $lessons = Lesson::where('teacher_id', auth()->id())
             ->orderBy('grade')->orderBy('title')
             ->get(['id', 'title', 'grade']);
+
         return view('create-homework', compact('lessons'));
     }
 
     public function store(Request $r)
     {
-        // 1) فاليديشن (grade أو lesson_id)
         $data = $r->validate([
-            // لو بتستخدمي grade فقط:
-            'grade' => ['nullable', 'integer', 'min:1', 'max:12'],
-            // ولو أحياناً بتمرّري lesson_id جاهز بدلاً من grade:
+            'grade'     => ['nullable', 'integer', 'min:1', 'max:12'],
             'lesson_id' => ['nullable', 'exists:lessons,id'],
+            'title'     => ['required', 'string', 'max:255'],
+            'due_at'    => ['required', 'date'],
+            'body'      => ['nullable', 'string'],
 
-            'title' => ['required', 'string', 'max:255'],
-            'due_at' => ['required', 'date'],      // <-- وحّدي الاسم مع العمود (due_at أو due_date)
-            'body' => ['nullable', 'string'],
-            'file' => ['nullable', 'file', 'max:20480'],
+            'files'     => ['nullable', 'array'],
+            'files.*'   => ['file', 'max:20480'],
         ], [], [
-            'grade' => 'الصف',
+            'grade'     => 'الصف',
             'lesson_id' => 'الدرس',
-            'title' => 'عنوان الواجب',
-            'due_at' => 'تاريخ التسليم',
-            'file' => 'الملف',
+            'title'     => 'عنوان الواجب',
+            'due_at'    => 'تاريخ التسليم',
+            'files'     => 'الملفات',
         ]);
 
-        // 2) حددي الـ lesson_id
+        // Lesson id
         if (!empty($data['lesson_id'])) {
-            // لو جاي من الفورم
             $lessonId = $data['lesson_id'];
         } else {
-            // لو جاي grade -> أنشئي/أحضري درساً افتراضياً لهذا المعلّم
             $lesson = Lesson::firstOrCreate(
                 ['teacher_id' => auth()->id(), 'grade' => $data['grade']],
                 ['title' => 'رياضيات – الصف ' . $data['grade']]
@@ -73,37 +72,46 @@ class AssignmentController extends Controller
             $lessonId = $lesson->id;
         }
 
-        // 3) تأكيد الملكية: لازم الدرس يتبع للمعلّم الحالي
         abort_unless(
-            Lesson::where('id', $lessonId)->where('teacher_id', auth()->id())->exists(),
-            403
+            Lesson::where('id', $lessonId)->where('teacher_id', auth()->id())->exists(), 403
         );
 
-        // 4) رفع الملف إن وجد
-        $filePath = null;
-        if ($r->hasFile('file')) {
-            $filePath = $r->file('file')->store('assignments', 'public');
-        }
-
-        // 5) إنشاء الواجب
-        Assignment::create([
+        // إنشاء
+        $assignment = Assignment::create([
             'lesson_id' => $lessonId,
-            'title' => $data['title'],
-            'due_at' => $data['due_at'],      // <-- غيّري لـ 'due_date' إذا هذا اسم عمودك
-            'body' => $data['body'] ?? null,
-            'file_path' => $filePath,
+            'title'     => $data['title'],
+            'due_at'    => $data['due_at'],
+            'body'      => $data['body'] ?? null,
+            'file_path' => null,
         ]);
 
-        return redirect()->route('assignments.index')->with('success', 'تم إضافة الواجب بنجاح.');
+        // مرفقات
+        if ($r->hasFile('files')) {
+            foreach ($r->file('files') as $file) {
+                $stored = $file->store('assignments', 'public');
+                $assignment->attachments()->create([
+                    'original_name' => $file->getClientOriginalName(),
+                    'path'          => $stored,
+                    'mime'          => $file->getClientMimeType(),
+                    'size'          => $file->getSize(),
+                ]);
+            }
+        }
+
+        return redirect()->route('assignments.index')
+                         ->with('success', 'تم إضافة الواجب بنجاح.');
     }
 
     public function edit(Assignment $assignment)
     {
-        $assignment->loadMissing(['attachments','lesson']);
+        $assignment->loadMissing(['attachments', 'lesson']);
         abort_unless($assignment->lesson && $assignment->lesson->teacher_id === auth()->id(), 403);
 
-        $lessons = Lesson::where('teacher_id', auth()->id())->orderBy('grade')->orderBy('title')->get(['id', 'title', 'grade']);
-        return view('homework-detials', compact('assignment', 'lessons'));
+        $lessons = Lesson::where('teacher_id', auth()->id())
+            ->orderBy('grade')->orderBy('title')
+            ->get(['id', 'title', 'grade']);
+
+        return view('assignments-edit', compact('assignment', 'lessons'));
     }
 
     public function update(Request $r, Assignment $assignment)
@@ -111,28 +119,64 @@ class AssignmentController extends Controller
         $assignment->loadMissing('lesson');
         abort_unless($assignment->lesson && $assignment->lesson->teacher_id === auth()->id(), 403);
 
-        $data = $r->validate([
-            'lesson_id' => ['required', 'exists:lessons,id'],
-            'title' => ['required', 'string', 'max:255'],
-            'body' => ['nullable', 'string'],
-            'due_at' => ['nullable', 'date'],
-            'weight' => ['nullable', 'integer', 'min:0', 'max:100'],
+        $validated = $r->validate([
+            'lesson_id'   => ['required', 'exists:lessons,id'],
+            'title'       => ['required', 'string', 'max:255'],
+            'body'        => ['nullable', 'string'],
+            'due_at'      => ['nullable', 'date'],
+            'weight'      => ['nullable', 'integer', 'min:0', 'max:100'],
+
+            'new_files'   => ['nullable', 'array'],
+            'new_files.*' => ['file', 'max:20480'],
         ]);
 
-        abort_unless(Lesson::where('id', $data['lesson_id'])
-            ->where('teacher_id', auth()->id())->exists(), 403);
+        // تأكيد ملكية الدرس
+        abort_unless(
+            Lesson::where('id', $validated['lesson_id'])
+                  ->where('teacher_id', auth()->id())->exists(), 403
+        );
 
-        $assignment->update($data);
+        // ✅ حدّث الأعمدة الفعلية فقط (بدون new_files)
+        $assignment->update([
+            'lesson_id' => $validated['lesson_id'],
+            'title'     => $validated['title'],
+            'body'      => $validated['body'] ?? null,
+            'due_at'    => $validated['due_at'] ?? $assignment->due_at,
+            'weight'    => array_key_exists('weight', $validated) ? $validated['weight'] : $assignment->weight,
+        ]);
 
-        return redirect()->route('assignments.index')->with('success', 'تم تحديث الواجب.');
+        // ✅ احفظ المرفقات الجديدة (إن وُجدت) بعد التحديث
+        if ($r->hasFile('new_files')) {
+            foreach ($r->file('new_files') as $file) {
+                $stored = $file->store('assignments', 'public');
+                $assignment->attachments()->create([
+                    'original_name' => $file->getClientOriginalName(),
+                    'path'          => $stored,
+                    'mime'          => $file->getClientMimeType(),
+                    'size'          => $file->getSize(),
+                ]);
+            }
+        }
+
+        // رسالة نجاح والرجوع للتفاصيل
+        return redirect()->route('assignments.show', $assignment->id)
+                         ->with('success', 'تم حفظ التعديلات.');
     }
 
     public function destroy(Assignment $assignment)
     {
-        $assignment->loadMissing('lesson');
+        $assignment->loadMissing('lesson', 'attachments');
         abort_unless($assignment->lesson && $assignment->lesson->teacher_id === auth()->id(), 403);
 
+        foreach ($assignment->attachments as $att) {
+            if ($att->path) {
+                Storage::disk('public')->delete($att->path);
+            }
+        }
+
         $assignment->delete();
-        return redirect()->route('assignments.index')->with('success', 'تم حذف الواجب.');
+
+        return redirect()->route('assignments.index')
+                         ->with('success', 'تم حذف الواجب.');
     }
 }

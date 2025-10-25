@@ -29,6 +29,7 @@ class User extends Authenticatable
         'national_id',
     ];
     protected $guarded = [];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -46,11 +47,10 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'password' => 'hashed','birth_date' => 'date',
     ];
     public function studentProfile()
     {
-        //return $this->hasOne(\App\Models\StudentProfile::class, 'student_id');
         return $this->hasOne(\App\Models\StudentProfile::class, 'user_id', 'id');
     }
 

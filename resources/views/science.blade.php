@@ -12,7 +12,7 @@
 
   <style>
     body{font-family:'Cairo',sans-serif;background:#f3f8ff}
-    .page-container{padding-top:70px} /* لو الـ navbar ثابت */
+    .page-container{padding-top:70px}
     .page-wrap{max-width:980px;margin:32px auto}
     .title{font-size:32px;font-weight:800;color:#1f3b8a;text-align:center}
     .subtitle{color:#667085;text-align:center;margin-top:6px}
@@ -45,8 +45,12 @@
       </a>
     </div>
     <div class="nav-right">
-      <button class="nav-btn" title="الإشعارات"><i class="fas fa-bell"></i><span class="badge">3</span></button>
-      <a href="#" class="nav-btn" title="الإعدادات"><i class="fas fa-cog"></i></a>
+                {{-- - <button class="nav-btn" title="الإشعارات">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <a href="#" class="nav-btn" title="الإعدادات">
+                    <i class="fas fa-cog"></i>--}}
       <a href="#" class="logout-btn" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
         <i class="fas fa-sign-out-alt"></i><span>تسجيل خروج</span>
       </a>
@@ -57,9 +61,7 @@
   <main class="page-wrap">
     <h1 class="title">العلوم العامة</h1>
     <div class="subtitle">الأستاذ/ة محمد علي · الصف الحادي عشر</div>
-        {{-- <div class="subtitle">الأستاذ/ة {{ auth()->user()->name ?? '—' }} · الصف الحادي عشر</div> --}}
 
-    {{-- الوحدة 1: الفيزياء --}}
     <section class="unit">
       <div class="unit-head">الوحدة الأولى: الفيزياء</div>
       <div class="divider"></div>
@@ -87,7 +89,6 @@
       </article>
     </section>
 
-    {{-- الوحدة 2: الكيمياء --}}
     <section class="unit">
       <div class="unit-head">الوحدة الثانية: الكيمياء</div>
       <div class="divider"></div>
@@ -115,7 +116,6 @@
       </article>
     </section>
 
-    {{-- الوحدة 3: الأحياء --}}
     <section class="unit">
       <div class="unit-head">الوحدة الثالثة: الأحياء</div>
       <div class="divider"></div>
@@ -143,7 +143,6 @@
       </article>
     </section>
 
-    {{-- الوحدة 4: الأرض والفضاء --}}
     <section class="unit">
       <div class="unit-head">الوحدة الرابعة: الأرض والفضاء</div>
       <div class="divider"></div>

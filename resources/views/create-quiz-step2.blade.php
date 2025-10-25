@@ -1,3 +1,21 @@
+@if (session('ok'))
+  <div class="alert"
+       style="background:#e6ffed;border:1px solid #b4f8c8;padding:10px;border-radius:8px;color:#1a7f37;margin-bottom:10px;">
+    {{ session('ok') }}
+  </div>
+@endif
+
+@if ($errors->any())
+  <div class="alert"
+       style="background:#fdecec;border:1px solid #f5c2c7;padding:10px;border-radius:8px;color:#b02a37;margin-bottom:10px;">
+    <ul style="margin:0">
+      @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+      @endforeach
+    </ul>
+  </div>
+@endif
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -148,17 +166,14 @@
             const first = container.querySelector('.question-card');
             const clone = first.cloneNode(true);
 
-            // تحديث المؤشرات والأسماء
             clone.setAttribute('data-index', qIndex);
             clone.querySelector('.question-title').textContent = 'السؤال ' + (qIndex + 1);
 
-            // نظّف القيم
             clone.querySelectorAll('input').forEach(inp => {
                 if (inp.type === 'text') inp.value = '';
                 if (inp.type === 'radio') inp.checked = false;
             });
 
-            // أسماء الحقول
             clone.querySelectorAll('[name]').forEach(el => {
                 el.name = el.name.replace(/questions\[\d+\]/g, 'questions[' + qIndex + ']');
                 // عدل ids لعناصر TF لتكون فريدة
@@ -168,14 +183,12 @@
                 }
             });
 
-            // اضبط راديوهات افتراضية
             clone.querySelectorAll('.answer-type-mc input[type=radio][name$="[correct]"]').forEach((r, i) => {
                 if (i === 0) r.checked = true;
             });
             const tfTrue = clone.querySelector(`#tf-true-${qIndex}`);
             if (tfTrue) tfTrue.checked = true;
 
-            // ارجع الـ MC ظاهرًا افتراضيًا
             clone.querySelector('.answer-type-mc').classList.remove('hidden');
             clone.querySelector('.answer-type-tf').classList.add('hidden');
             clone.querySelector('.question-type-select').value = 'mc';
@@ -188,14 +201,12 @@
             const cards = document.querySelectorAll('.question-card');
             cards.forEach((c, i) => {
                 c.querySelector('.question-title').textContent = 'السؤال ' + (i + 1);
-                // ترتيب العرض
                 let ord = c.querySelector('input[name^="questions"][name$="[ord]"]');
                 if (ord) ord.value = (i + 1);
             });
         }
     </script> --}}
     <script>
-  // خلي المؤشر يبدأ من عدد الكروت الحالية - 1
   let qIndex = document.querySelectorAll('#questions-container .question-card').length - 1;
 
   function updateQuestionCount() {
@@ -204,7 +215,6 @@
     if (el) el.textContent = cnt;
   }
 
-  // أول ما تفتح الصفحة
   window.addEventListener('DOMContentLoaded', updateQuestionCount);
 
   function toggleAnswerArea(sel) {
@@ -223,7 +233,7 @@
     }
     card.remove();
     renumber();
-    updateQuestionCount(); // ← مهم
+    updateQuestionCount();
   }
 
   function addQuestion() {
@@ -232,31 +242,26 @@
     const first = container.querySelector('.question-card');
     const clone = first.cloneNode(true);
 
-    // حدّث العناوين والمفاتيح
     clone.setAttribute('data-index', qIndex);
     clone.querySelector('.question-title').textContent = 'السؤال ' + (qIndex + 1);
 
-    // نظّف القيم
     clone.querySelectorAll('input').forEach(inp => {
       if (inp.type === 'text') inp.value = '';
       if (inp.type === 'radio') inp.checked = false;
     });
 
-    // عدّل الأسماء والـ ids
     clone.querySelectorAll('[name]').forEach(el => {
       el.name = el.name.replace(/questions\[\d+\]/g, 'questions[' + qIndex + ']');
       if (el.id && el.id.startsWith('tf-')) {
-        const base = el.id.split('-')[1]; // true/false
+        const base = el.id.split('-')[1]; //
         el.id = `tf-${base}-${qIndex}`;
       }
     });
 
-    // الحالة الافتراضية
     clone.querySelector('.question-type-select').value = 'mc';
     clone.querySelector('.answer-type-mc').classList.remove('hidden');
     clone.querySelector('.answer-type-tf').classList.add('hidden');
 
-    // علم أول خيار صحيح في MC، وصح في TF
     const mcCorrect = clone.querySelectorAll('.answer-type-mc input[type=radio][name$="[correct]"]');
     if (mcCorrect.length) mcCorrect[0].checked = true;
     const tfTrue = clone.querySelector(`#tf-true-${qIndex}`);
@@ -264,7 +269,7 @@
 
     container.appendChild(clone);
     renumber();
-    updateQuestionCount(); // ← مهم
+    updateQuestionCount();
   }
 
   function renumber() {

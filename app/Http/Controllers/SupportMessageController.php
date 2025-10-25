@@ -1,6 +1,4 @@
 <?php
-
-// app/Http/Controllers/SupportMessageController.php
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -31,25 +29,40 @@ class SupportMessageController extends Controller
         return back()->with('status', 'تم إرسال الرسالة إلى الإدارة.');
     }
     public function index()
-    {
-        // لعرض كل الرسائل مثلاً
-        $messages = SupportMessage::latest()->get();
-        return view('support_message', compact('messages'));
+{
+    $user = auth()->user();
+
+    $query = SupportMessage::with('creator')->latest();
+
+    if (!$user->hasAnyRole(['admin', 'user-admin'])) {
+        // مستخدم عادي (طالب/معلّم) يشوف رسائله فقط
+        $query->where('created_by_user_id', $user->id);
     }
 
+    $messages = $query->get();
 
-    public function reply(Request $r, SupportMessage $supportMessage)
-    {
-        $r->validate([
-            'response' => 'required|string',
-            'status' => 'required|in:answered,closed,open',
-        ]);
+    return view('support_message', compact('messages'));
+}
 
-        $supportMessage->update([
-            'response' => $r->response,
-            'status' => $r->status,
-        ]);
 
-        return back()->with('status', 'تم تحديث الرسالة.');
-    }
+
+   public function reply(Request $r, SupportMessage $supportMessage)
+{
+    // فقط admin / user-admin
+    abort_unless(auth()->user()->hasAnyRole(['admin','user-admin']), 403);
+
+    $r->validate([
+        'response' => 'required|string',
+        'status'   => 'required|in:answered,closed,open',
+    ]);
+
+    $supportMessage->update([
+        'response'      => $r->response,
+        'status'        => $r->status,
+        'admin_user_id' => auth()->id(), // مين اللي رد (اختياري ومفيد)
+    ]);
+
+    return back()->with('status', 'تم تحديث الرسالة.');
+}
+
 }

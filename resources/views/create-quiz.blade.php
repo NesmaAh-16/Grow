@@ -30,13 +30,12 @@
             </div>
 
             <div class="nav-right">
-                <button class="nav-btn" title="الإشعارات">
+                {{-- - <button class="nav-btn" title="الإشعارات">
                     <i class="fas fa-bell"></i>
                     <span class="badge">3</span>
                 </button>
                 <a href="#" class="nav-btn" title="الإعدادات">
-                    <i class="fas fa-cog"></i>
-                </a>
+                    <i class="fas fa-cog"></i>--}}
                 <a href="#" class="logout-btn"
                     onclick ="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="fas fa-sign-out-alt"></i>
@@ -55,7 +54,6 @@
                 <h1>إعدادات الاختبار</h1>
                 <p class="subtitle">ابدأ بإدخال التفاصيل الأساسية وخيارات الاختبار.</p>
             </header>
-            {{-- resources/views/create-quiz.blade.php --}}
             @if ($errors->any())
                 <div style="background:#fee;color:#900;padding:8px;margin-bottom:10px">
                     <b>Validation failed:</b>
@@ -74,7 +72,6 @@
                     <h2 class="section-title">بيانات الاختبار الأساسية</h2>
                     <div class="form-grid">
 
-                        {{-- الصف فقط --}}
                         <div class="form-group">
                             <label for="grade">الصف</label>
                             <select id="grade" name="grade" required>
@@ -87,13 +84,11 @@
                             </select>
                         </div>
 
-                        {{-- عنوان الاختبار (مطلوب) --}}
                         <div class="form-group">
                             <label for="title">عنوان الاختبار</label>
                             <input type="text" id="title" name="title" value="{{ old('title') }}" required>
                         </div>
 
-                        {{-- الدرجة الكلية (اختياري) --}}
                         <div class="form-group">
                             <label for="total_marks">الدرجة الكلية</label>
                             <input type="number" id="total_marks" name="total_marks"

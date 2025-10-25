@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="assets/css/navbar.css">
   <link rel="stylesheet" href="assets/css/lesson.css">
 
- 
+
 </head>
 <body>
  <div class="page-container">
@@ -26,17 +26,16 @@
             <i class="fas fa-home" style="margin-left: 8px"></i>
             الصفحة الرئيسية
           </a>
-          
+
         </div>
 
             <div class="nav-right">
-                <button class="nav-btn" title="الإشعارات">
+                {{-- - <button class="nav-btn" title="الإشعارات">
                     <i class="fas fa-bell"></i>
                     <span class="badge">3</span>
                 </button>
                 <a href="#" class="nav-btn" title="الإعدادات">
-                    <i class="fas fa-cog"></i>
-                </a>
+                    <i class="fas fa-cog"></i>--}}
                 <a href="login.html" class="logout-btn">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>تسجيل خروج</span>

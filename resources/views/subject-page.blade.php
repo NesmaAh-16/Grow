@@ -29,14 +29,12 @@
             </div>
 
             <div class="nav-right">
-                <button class="nav-btn" title="الإشعارات">
+                {{-- - <button class="nav-btn" title="الإشعارات">
                     <i class="fas fa-bell"></i>
                     <span class="badge">3</span>
                 </button>
-
                 <a href="#" class="nav-btn" title="الإعدادات">
-                    <i class="fas fa-cog"></i>
-                </a>
+                    <i class="fas fa-cog"></i>--}}
 
                 <a href="#" class="logout-btn"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -56,7 +54,6 @@
   </section>
 </div>
   <div class="units-container">
-    <!-- Unit 1 -->
     <div class="unit-card">
       <div class="unit-title">
         <h2>الوحدة الأولى: النصوص الأدبية</h2>

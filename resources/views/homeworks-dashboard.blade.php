@@ -101,13 +101,12 @@
             </div>
 
             <div class="nav-right">
-                <button class="nav-btn" title="الإشعارات">
+                {{-- - <button class="nav-btn" title="الإشعارات">
                     <i class="fas fa-bell"></i>
                     <span class="badge">3</span>
                 </button>
                 <a href="#" class="nav-btn" title="الإعدادات">
-                    <i class="fas fa-cog"></i>
-                </a>
+                    <i class="fas fa-cog"></i>--}}
                 <a href="#" class="logout-btn"
                     onclick ="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="fas fa-sign-out-alt"></i>
@@ -129,7 +128,6 @@
                 </a>
             </section>
 
-            {{-- ✅ نموذج إضافة واجب جديد --}}
             {{-- -
             <section class="form-section">
                 <h2 class="section-title">إضافة واجب جديد</h2>
@@ -168,7 +166,6 @@
                 </form>
             </section> --}}
 
-            {{-- ✅ جدول الواجبات --}}
             <section class="assignments-section" style="margin-top:2rem;">
                 <table class="assignments-table">
                     <thead>
@@ -194,8 +191,8 @@
                                 <td>{{ $a->submissions_count ?? 0 }}</td>
 
                                 @php
-                                    $s = $a->status_label; // 'نشط' أو 'منتهي'
-                                    $cls = $s === 'منتهي' ? 'completed' : 'in-review'; // طابقناها مع CSS
+                                    $s = $a->status_label;
+                                    $cls = $s === 'منتهي' ? 'completed' : 'in-review';
                                 @endphp
 
                                 <td class="status-cell">
@@ -206,7 +203,14 @@
                                     <div class="actions">
                                         <a href="{{ route('assignments.show', $a->id) }}"
                                             class="btn-sm btn-view">عرض</a>
-                                        <button class="btn-sm btn-delete" data-id="{{ $a->id }}">حذف</button>
+
+                                        <form action="{{ route('assignments.destroy', $a->id) }}" method="POST"
+                                            onsubmit="return confirm('هل تريد حذف هذا الواجب نهائيًا؟');"
+                                            style="display:inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-sm btn-delete">حذف</button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

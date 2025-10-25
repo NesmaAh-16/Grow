@@ -1,4 +1,3 @@
-{{-- resources/views/attempt-quiz.blade.php --}}
 @if ($errors->any())
   <div class="alert alert-danger">
     <ul>@foreach ($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
@@ -53,7 +52,6 @@
     </nav>
 
     <main class="main-content">
-      {{-- لوحة جانبية --}}
       <aside class="quiz-dashboard">
         <div class="dashboard-header">
           <span class="label">الوقت المتبقي</span>
@@ -67,13 +65,11 @@
           @endforeach
         </div>
 
-        {{-- زر التسليم يرسل الفورم الرئيسي --}}
         <button id="submit-btn" class="btn btn-success submit-btn" form="attempt-form">
           إنهاء و تسليم الاختبار
         </button>
       </aside>
 
-      {{-- منطقة الأسئلة (فورم واحد) --}}
       <section id="question-area" class="question-area">
         <form id="attempt-form" method="POST" action="{{ route('quizzes.attempt.submit', $quiz->id) }}">
           @csrf
@@ -108,7 +104,6 @@
             </article>
           @endforeach
 
-          {{-- إرسالي أيضاً من هنا احتياطاً --}}
           <div class="form-actions">
             <button type="submit" class="btn btn-primary">تسليم</button>
           </div>
@@ -117,13 +112,9 @@
     </main>
   </div>
 
-  {{-- متغيّرات لسكربت التايمر لو بدك --}}
   <script>
-    // مدة الامتحان بالدقائق (لو عندك مدة خزّنيها؛ وإلا حطي قيمة ثابتة)
     window.QUIZ_DURATION_MIN = {{ $durationMinutes ?? 15 }};
   </script>
-
-  {{-- JS الخاص فيك (لو عندك سكربت يبني الأسئلة، يمكنك تجاهل ما فوق واستعمال JSON) --}}
   <script src="{{ asset('assets/js/attempt-quiz.js') }}"></script>
 </body>
 </html>

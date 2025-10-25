@@ -36,10 +36,6 @@ class NewPasswordController extends Controller
                 $user->forceFill(['password' => Hash::make($password)])->save();
             }
         );
-        /*Log::info('RESET-FORM', [
-    'email' => $r->input('email'),
-    'token_len' => strlen((string)$r->input('token')),
-]);*/
         return $status === Password::PASSWORD_RESET
             ? redirect()->route('login')->with('status', 'تم تعيين كلمة المرور بنجاح.')
             : back()->withErrors(['email' => __($status)]);

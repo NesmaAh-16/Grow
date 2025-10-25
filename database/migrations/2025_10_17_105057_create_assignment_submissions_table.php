@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        // في ملف الميجريشن: database/migrations/xxxx_create_assignment_submissions_table.php
         Schema::create('assignment_submissions', function (Blueprint $table) {
             $table->id();
 
@@ -16,7 +15,7 @@ return new class extends Migration {
                 ->cascadeOnDelete();
 
             $table->foreignId('student_id')
-                ->constrained('users') // مهم: users وليس students
+                ->constrained('users') 
                 ->cascadeOnDelete();
 
             $table->string('file_path')->nullable();

@@ -30,7 +30,6 @@
             color: var(--ink)
         }
 
-        /* صندوق النموذج */
         .create-quiz-form {
             background: var(--card);
             border: 1px solid var(--border);
@@ -61,7 +60,6 @@
             color: var(--muted);
         }
 
-        /* حقول الإدخال */
         .form-group input[type="text"],
         .form-group input[type="datetime-local"],
         .form-group input[type="file"],
@@ -138,7 +136,6 @@
             background: #f8fafc;
         }
 
-        /* شارة الحالة (إن استُخدمت) */
         .badge {
             padding: .35rem .65rem;
             border-radius: 999px;
@@ -156,7 +153,6 @@
             color: var(--success)
         }
 
-        /* موبايل */
         @media (max-width: 768px) {
             .form-grid {
                 grid-template-columns: 1fr;
@@ -194,12 +190,12 @@
             </div>
 
             <div class="nav-right">
-                <button class="nav-btn" title="الإشعارات">
+                {{-- - <button class="nav-btn" title="الإشعارات">
                     <i class="fas fa-bell"></i>
                     <span class="badge">3</span>
                 </button>
                 <a href="#" class="nav-btn" title="الإعدادات">
-                    <i class="fas fa-cog"></i>
+                    <i class="fas fa-cog"></i>--}}
                 </a>
                 <a href="#" class="logout-btn"
                     onclick ="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -252,14 +248,16 @@
 
                     <div class="form-group">
                         <label for="due_at">تاريخ التسليم</label>
-                        {{-- لو عمودك اسمه due_date بدّله هنا وفي الكنترولر --}}
                         <input type="datetime-local" id="due_at" name="due_at" value="{{ old('due_at') }}"
                             required>
                     </div>
 
                     <div class="form-group full-width">
-                        <label for="file">ملف مرفق (اختياري)</label>
-                        <input type="file" id="file" name="file">
+                        <label for="files">مرفقات (اختياري)</label>
+                        <input type="file" id="files" name="files[]" multiple>
+                        @error('files.*')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="form-group full-width">

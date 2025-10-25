@@ -36,10 +36,8 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <a class="brand" href="{{ route('home') }}">
-                    <!-- Make sure this path is correct -->
                     <img class="logo" src="{{ asset('assets/images/logo2-removebg-preview.png') }}"
                         alt="شعار المنصة" />
-                    <!-- Make sure this path is correct -->
                     <img class="brand-name" src="{{ asset('assets/images/edited_color.png') }}" alt="Grow" />
                 </a>
             </div>

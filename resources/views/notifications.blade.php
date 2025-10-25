@@ -30,13 +30,12 @@
         </div>
 
             <div class="nav-right">
-                <a href="notifications.html" class="nav-btn" title="الإشعارات">
+                {{-- - <button class="nav-btn" title="الإشعارات">
                     <i class="fas fa-bell"></i>
                     <span class="badge">3</span>
-                </a>
-                <a href="teacher-settings.html" class="nav-btn" title="الإعدادات">
-                    <i class="fas fa-cog"></i>
-                </a>
+                </button>
+                <a href="#" class="nav-btn" title="الإعدادات">
+                    <i class="fas fa-cog"></i>--}}
                 <a href="index.html" class="logout-btn">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>تسجيل خروج</span>

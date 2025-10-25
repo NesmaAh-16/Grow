@@ -20,26 +20,10 @@ class QuizController extends Controller
     }
 
 
-
-    // عرض
-    /* public function show(int $id)
-     {
-         $quiz = Quiz::withCount('questions')
-             ->with(['lesson', 'questions'])
-             ->findOrFail($id);
-             //$quiz->loadMissing('lesson','questions')->loadCount('questions');
-         $quiz->load(['lesson', 'questions']);
-         $attemptsAllowed = $quiz->attempts_allowed ?? 1;
-         $totalMarks = $quiz->total_marks ?? 100;
-         return view('quiz-page', compact('quiz', 'attemptsAllowed', 'totalMarks'));
-     }*/
-
     public function show(Quiz $quiz)
     {
-        // تحميل العلاقات
         $quiz->loadMissing('lesson', 'questions')->loadCount('questions');
 
-        // حماية الملكية (لو لازم)
         if ($quiz->lesson && $quiz->lesson->teacher_id !== auth()->id()) {
             abort(403);
         }
@@ -81,59 +65,82 @@ class QuizController extends Controller
         return view('attempt-quiz', compact('quiz', 'durationMinutes', 'attemptsAllowed', 'totalMarks'));
     }
 
+    /* public function store(Request $r)
+     {
+         $data = $r->validate([
+             'grade' => ['required', 'integer', 'min:1', 'max:12'],
+             'title' => ['required', 'string', 'max:200'],
+             'total_marks' => ['nullable', 'integer', 'min:1'],
+             'attempts_allowed' => ['nullable', 'integer', 'min:1', 'max:20'],
+             'available_from' => ['nullable', 'date'],
+             'available_to' => ['nullable', 'date', 'after_or_equal:available_from'],
+         ]);
+
+         $teacherId = auth()->id();
+         $subject = 'رياضيات';
+
+         $lesson = Lesson::firstOrCreate(
+             ['teacher_id' => $teacherId, 'grade' => $data['grade']],
+             ['title' => $subject . ' – الصف ' . $data['grade']]
+         );
+
+         $attempts = (int) $r->input('attempts_allowed', 1);
+         $attempts = max(1, min(20, $attempts));
+
+         $quiz = Quiz::create([
+             'lesson_id' => $lesson->id,
+             'title' => $data['title'],
+             'total_marks' => $data['total_marks'] ?? 100,
+             'attempts_allowed' => $data['attempts_allowed'] ?? 1,
+             'available_from' => $data['available_from'],
+             'available_to' => $data['available_to'],
+         ]);
+
+         return redirect()
+             ->route('quizzes.questions.createContinue', ['quiz' => $quiz->id])
+             ->with('success', 'تم إنشاء الاختبار. أضِف الأسئلة الآن.');
+     }*/
+    // $teacherId = auth()->id();
     public function store(Request $r)
-    {
-        $data = $r->validate([
-            'grade' => ['required', 'integer', 'min:1', 'max:12'],
-            'title' => ['required', 'string', 'max:200'],
-            'total_marks' => ['nullable', 'integer', 'min:1'],
-            'attempts_allowed' => ['nullable', 'integer', 'min:1', 'max:20'],
-            'available_from' => ['nullable', 'date'],
-            'available_to' => ['nullable', 'date', 'after_or_equal:available_from'],
-        ]);
+{
+    $data = $r->validate([
+        'lesson_id'         => ['required', 'integer', 'exists:lessons,id'],
+        'title'             => ['required', 'string', 'max:200'],
+        'total_marks'       => ['nullable', 'integer', 'min:1'],
+        'attempts_allowed'  => ['nullable', 'integer', 'min:1', 'max:20'],
+        'available_from'    => ['nullable', 'date'],
+        'available_to'      => ['nullable', 'date', 'after_or_equal:available_from'],
+    ]);
 
-        $teacherId = auth()->id();
-        $subject = 'رياضيات';
+    // تأكيد ملكية الدرس
+    $lesson = Lesson::where('id', $data['lesson_id'])
+        ->where('teacher_id', auth()->id())
+        ->firstOrFail();
 
-        $lesson = Lesson::firstOrCreate(
-            ['teacher_id' => $teacherId, 'grade' => $data['grade']],
-            ['title' => $subject . ' – الصف ' . $data['grade']]
-        );
+    $quiz = Quiz::create([
+        'lesson_id'        => $lesson->id,
+        'title'            => $data['title'],
+        'total_marks'      => $data['total_marks'] ?? 100,
+        'attempts_allowed' => $data['attempts_allowed'] ?? 1,
+        'available_from'   => $data['available_from'] ?? null,
+        'available_to'     => $data['available_to'] ?? null,
+    ]);
 
-        $attempts = (int) $r->input('attempts_allowed', 1);
-        $attempts = max(1, min(20, $attempts));
-
-        $quiz = Quiz::create([
-            'lesson_id' => $lesson->id,
-            'title' => $data['title'],
-            'total_marks' => $data['total_marks'] ?? 100,
-            'attempts_allowed' => $data['attempts_allowed'] ?? 1,   // اجعل الافتراضي 1 إن أردت
-            'available_from' => $data['available_from'],
-            'available_to' => $data['available_to'],
-        ]);
-
-        return redirect()
-            ->route('quizzes.questions.createContinue', ['quiz' => $quiz->id])
-            ->with('success', 'تم إنشاء الاختبار. أضِف الأسئلة الآن.');
-    }
+    return redirect()
+        ->route('quizzes.questions.createContinue', ['quiz' => $quiz->id])
+        ->with('ok', 'تم إنشاء الاختبار. أضِف الأسئلة الآن.');
+}
 
 
-
-
-    // App\Http\Controllers\Teacher\QuizController.php
     public function results(Quiz $quiz)
     {
-        // حمّل العلاقات المطلوبة إن لم تكن محمّلة
         $quiz->loadMissing('lesson', 'questions');
-
-        // لو الاختبار غير مرتبط بدرس (أو الدرس محذوف)
         if (!$quiz->lesson) {
             return redirect()
                 ->route('quizzes.index')
                 ->with('error', 'هذا الاختبار غير مرتبط بدرس. يرجى ربطه بدرس أولاً.');
         }
 
-        // تحقّق الملكية: لا تسمح لغير المعلّم المالك
         abort_unless($quiz->lesson->teacher_id === auth()->id(), 403);
 
         return view('quiz-results', compact('quiz'));
@@ -141,10 +148,7 @@ class QuizController extends Controller
 
     public function edit(Quiz $quiz)
     {
-        // التحقق من ملكية المعلم للاختبار
         abort_unless($quiz->lesson && $quiz->lesson->teacher_id === auth()->id(), 403);
-
-        // جلب الدروس التي يملكها هذا المعلم فقط
         $lessons = Lesson::where('teacher_id', auth()->id())
             ->orderBy('title')
             ->get(['id', 'title', 'grade']);
@@ -163,7 +167,46 @@ class QuizController extends Controller
             'available_to' => ['nullable', 'date', 'after:available_from'],
             'lesson_id' => ['required', 'integer', 'exists:lessons,id'],
         ]);
+
         $quiz->update($data);
-        return back();
+
+        return back()->with('ok', 'تم تحديث بيانات الاختبار بنجاح.');
     }
+    public function destroy(Quiz $quiz)
+    {
+        abort_unless($quiz->lesson && $quiz->lesson->teacher_id === auth()->id(), 403);
+
+        // إن لزم: $quiz->questions()->delete(); ... إلخ
+        $quiz->delete();
+
+        return redirect()
+            ->route('quizzes.index')
+            ->with('ok', 'تم حذف الاختبار بنجاح.');
+    }
+    public function attempt(\App\Models\Quiz $quiz)
+{
+    $quiz->load('questions:id,quiz_id,text,type,points,options');
+
+    $now = now();
+    $withinWindow =
+        (is_null($quiz->available_from) || $quiz->available_from <= $now) &&
+        (is_null($quiz->available_to)   || $quiz->available_to   >= $now);
+
+    if (!$withinWindow) {
+        return view('attempt-quiz', [
+            'quiz' => $quiz,
+            'durationMinutes' => $quiz->duration_minutes ?? 15,
+            'error' => 'خطأ: هذا الاختبار غير متاح حاليًا.'
+        ]);
+    }
+
+    return view('attempt-quiz', [
+        'quiz' => $quiz,
+        'durationMinutes' => $quiz->duration_minutes ?? 15,
+        'error' => null
+    ]);
+}
+
+    
+
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 @php
-    $email = $email ?? request('email'); // يدعم الحالتين
+    $email = $email ?? request('email'); //  
 @endphp
 
 <head>
@@ -37,8 +37,7 @@
     <div class="confirm-container fade-up">
         <h2 class="delay-1">تأكيد استعادة كلمة المرور</h2>
         <p>أدخل بريدك الإلكتروني لإرسال رمز تحقق مكوّن من 6 أرقام.</p>
-        {{-- - <p class="delay-2">لقد أرسلنا رمز تأكيد مكونًا من 6 أرقام إلى بريدك الإلكتروني. الرجاء   للمتابعة.
-        </p> --}}
+
 
         <div class="message-box" id="messageBox"></div>
         @if (session('status'))
@@ -53,9 +52,7 @@
                 </ul>
             </div>
         @endif
-        {{-- CSS CDN: لا تستخدم asset() مع رابط خارجي --}}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-        {{-- فورم التحقق من الرمز --}}
         @if (empty($email))
             <form method="POST" action="{{ route('password.email') }}">
                 @csrf

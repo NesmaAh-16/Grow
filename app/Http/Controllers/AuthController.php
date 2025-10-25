@@ -10,9 +10,6 @@ use App\Models\StudentProfile;
 
 class AuthController extends Controller
 {
-    /*public function showLogin() {
-        return view('login'); // تأكدي الملف موجود
-    }*/
     public function showLogin()
     {
         if (Auth::check()) {
@@ -29,6 +26,24 @@ class AuthController extends Controller
             }
         }
         return view('login');
+    }
+    private function redirectByRole(User $user)
+    {
+        if ($user->hasRole('super-admin'))
+            return redirect()->route('admin.dashboard');
+        if ($user->hasRole('admin'))
+            return redirect()->route('admin.dashboard');
+        if ($user->hasRole('user-admin'))
+            return redirect()->route('user_admin.dashboard');
+        if ($user->hasRole('teacher'))
+            return redirect()->route('teacher.dashboard');
+        if ($user->hasRole('student'))
+            return redirect()->route('student.dashboard');
+
+        Auth::logout();
+        return redirect()->route('login')->withErrors([
+            'email' => 'الحساب لا يملك أي دور مفعّل.'
+        ]);
     }
 
     public function attempt(Request $r)
@@ -84,7 +99,7 @@ class AuthController extends Controller
         ];
 
         $validated = $r->validate($rules, $messages); //
-
+        
 
         $user = User::where('email', $r->email)->first();
 
@@ -122,6 +137,8 @@ class AuthController extends Controller
 
         return redirect()->route('student.dashboard');
     }
+
+
     /*public function login(Request $r)
     {
         $role = $r->input('login_as'); // 'admin' | 'teacher' | 'student'
@@ -261,8 +278,6 @@ class AuthController extends Controller
         $r->session()->regenerateToken();
         return redirect()->route('login');
     }
-
-
     /*public function show()
     {
         $user = auth()->user();

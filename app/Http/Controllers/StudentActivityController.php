@@ -1,6 +1,4 @@
 <?php
-
-// app/Http/Controllers/StudentActivityController.php
 namespace App\Http\Controllers;
 
 use App\Models\StudentActivity;
@@ -8,7 +6,6 @@ use Illuminate\Http\Request;
 
 class StudentActivityController extends Controller
 {
-    // تسجيل تسليم (واجب/كويز)
     public function submit(Request $r)
     {
         $data = $r->validate([
@@ -26,7 +23,6 @@ class StudentActivityController extends Controller
         return back()->with('status', 'تم تسجيل التسليم.');
     }
 
-    // تصحيح/تقييم
     public function grade(Request $r, StudentActivity $activity)
     {
         $r->validate([

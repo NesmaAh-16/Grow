@@ -29,7 +29,6 @@
 </head>
 <body>
 <div class="dashboard-container">
-    {{-- Sidebar --}}
     <aside class="sidebar">
         <div class="sidebar-header">
             <a class="brand" href="{{ route('home') }}">
@@ -47,7 +46,6 @@
         </nav>
     </aside>
 
-    {{-- Main --}}
     <main class="main-content">
         <header class="main-header">
             <div class="header-title">
@@ -87,7 +85,6 @@
             </div>
         </header>
 
-        {{-- كارت تفاصيل الطالب --}}
         <section style="max-width:900px">
             <div class="table-responsive">
                 <table>
@@ -132,15 +129,6 @@
                 </table>
             </div>
         </section>
-
-        {{-- (اختياري) بطاقة سريعة للملاحظات أو معلومات إضافية --}}
-        {{--
-        <section style="max-width:900px;margin-top:16px">
-            <div class="alert" style="background:#f8f9fb;border:1px solid #e3e6ef;border-radius:10px;padding:12px">
-                ملاحظة: يمكنك ربط الطالب بفصل/قسم لاحقًا.
-            </div>
-        </section>
-        --}}
     </main>
 </div>
 </body>

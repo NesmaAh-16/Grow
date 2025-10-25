@@ -58,14 +58,26 @@
                     <p class="subtitle">نظرة عامة على المستخدمين في النظام.</p>
                 </div>
                 <div class="header-actions">
-                    <button class="action-btn" title="الإشعارات">
-                        <i class="fas fa-bell"></i>
-                        {{-- إن بدك الرقم ديناميكي لاحقاً، اربطيه بمتغيّر --}}
-                        <span class="badge">3</span>
-                    </button>
-                    <button class="action-btn" title="الإعدادات">
-                        <i class="fas fa-cog"></i>
-                    </button>
+                    {{-- - <button class="nav-btn" title="الإشعارات">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <a href="#" class="nav-btn" title="الإعدادات">
+                    <i class="fas fa-cog"></i> --}}
+                    @role('admin|user-admin')
+                        @php
+                            // عدد الطلبات المفتوحة عند كل المستخدمين
+                            $openAll = \App\Models\SupportMessage::where('status', 'open')->count();
+                        @endphp
+
+                        <a href="{{ route('support.index') }}" class="nav-btn" title="الدعم الفني">
+                            <i class="fas fa-headset"></i>
+                            @if ($openAll > 0)
+                                <span class="badge">{{ $openAll }}</span>
+                            @endif
+                            <span>الدعم الفني</span>
+                        </a>
+                    @endrole
                     <a href="#" class="logout-btn"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="fas fa-sign-out-alt"></i>
@@ -77,7 +89,6 @@
                 </div>
             </header>
 
-            {{-- بطاقة الإحصائيات: أرقام ديناميكية من الكنترولر --}}
             <section class="stats-grid">
                 <div class="stat-card">
                     <div class="card-icon"><i class="fas fa-user-graduate"></i></div>
@@ -101,7 +112,6 @@
                 </div>
             </section>
 
-            {{-- (اختياري) آخر 10 مستخدمين – لو بدك تعرضيهم تحت الإحصائيات --}}
             @isset($latestUsers)
                 <section class="latest-users">
                     <h2 style="margin: 20px 0 10px">آخر المسجلين</h2>
@@ -124,14 +134,18 @@
                                         <td>{{ $u->name }}</td>
                                         <td>{{ $u->email }}</td>
                                         <td>
-                                            @if ($u->user_type === 'student' || $u->hasRole('student') || $u->studentProfile)
-                                                طالب
-                                            @elseif($u->user_type === 'teacher' || $u->hasRole('teacher') || $u->teacherProfile)
-                                                معلم
-                                            @else
-                                                -
-                                            @endif
-                                        </td>
+    @php
+        // نعطي أولوية: أدمن > أدمن المستخدمين > معلم > طالب
+        $typeLabel =
+            ($u->hasRole('admin') ? 'أدمن النظام' :
+            ($u->hasRole('user-admin') ? 'أدمن المستخدمين' :
+            (
+                ($u->user_type === 'teacher' || $u->hasRole('teacher') || $u->teacherProfile) ? 'معلم' :
+                (($u->user_type === 'student' || $u->hasRole('student') || $u->studentProfile) ? 'طالب' : '-')
+            )));
+    @endphp
+    {{ $typeLabel }}
+</td>
 
                                         <td>{{ $u->status ?? '-' }}</td>
                                         <td>{{ $u->created_at?->format('Y-m-d H:i') }}</td>

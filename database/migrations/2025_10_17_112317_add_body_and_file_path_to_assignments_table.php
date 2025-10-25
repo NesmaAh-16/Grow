@@ -5,12 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    /**
-     * Run the migrations.
-     */
+    
     public function up(): void
     {
-        // أضف العمود فقط إذا كان غير موجود
         if (!Schema::hasColumn('assignments', 'body')) {
             Schema::table('assignments', function (Blueprint $table) {
                 $table->text('body')->nullable()->after('title');

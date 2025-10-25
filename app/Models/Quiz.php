@@ -35,7 +35,6 @@ class Quiz extends Model
         return $this->hasMany(Question::class);
     }
 
-    // مدة الاختبار بالدقائق (مشتقّة من from/to)
     public function getDurationMinutesAttribute(): ?int
     {
         if (!$this->available_from || !$this->available_to) {

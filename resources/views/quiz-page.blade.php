@@ -1,3 +1,21 @@
+@if (session('ok'))
+  <div class="alert"
+       style="background:#e6ffed;border:1px solid #b4f8c8;padding:10px;border-radius:8px;color:#1a7f37;margin-bottom:10px;">
+    {{ session('ok') }}
+  </div>
+@endif
+
+@if ($errors->any())
+  <div class="alert"
+       style="background:#fdecec;border:1px solid #f5c2c7;padding:10px;border-radius:8px;color:#b02a37;margin-bottom:10px;">
+    <ul style="margin:0">
+      @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+      @endforeach
+    </ul>
+  </div>
+@endif
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -13,7 +31,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="{{ asset('assets/css/navbar.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/quiz-page.css') }}" />
-    
+
 </head>
 
 <body>
@@ -36,13 +54,12 @@
             </div>
 
             <div class="nav-right">
-                <button class="nav-btn" title="الإشعارات">
+                {{-- - <button class="nav-btn" title="الإشعارات">
                     <i class="fas fa-bell"></i>
                     <span class="badge">3</span>
                 </button>
                 <a href="#" class="nav-btn" title="الإعدادات">
-                    <i class="fas fa-cog"></i>
-                </a>
+                    <i class="fas fa-cog"></i>--}}
                 <a href="#" class="logout-btn"
                     onclick ="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="fas fa-sign-out-alt"></i>
@@ -58,7 +75,6 @@
         <main class="main-content">
             <div class="quiz-card">
                 <h1>اختبار قصير : <span>{{ $quiz->title }}</span></h1>
-                {{-- <h1>اختبار قصير : <span>علوم الفضاء</span></h1> --}}
                 <div class="info-section">
                     <div class="info-item">
                         <div class="info-item-text">
@@ -77,7 +93,7 @@
                     </div>
                     <?php
 
-                    //dd($quiz->attempts_allowed); ?>
+                     ?>
                     <div class="info-item">
                         <div class="info-item-text">
                             <span class="label">عدد المحاولات :</span>

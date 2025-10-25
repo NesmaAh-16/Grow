@@ -6,11 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الصفحة الشخصية</title>
 
-    {{-- favicon: لا تضعي width داخل link --}}
     <link rel="icon" href="{{ asset('assets/images/logo2-removebg-preview.png') }}" type="image/x-icon">
 
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    {{-- ❌ كان: asset('https://cdnjs...') -> هذا يُفسد الرابط --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <link rel="stylesheet" href="{{ asset('assets/css/navbar.css') }}">
@@ -35,14 +33,12 @@
             </div>
 
             <div class="nav-right">
-                <button class="nav-btn" title="الإشعارات">
+                {{-- - <button class="nav-btn" title="الإشعارات">
                     <i class="fas fa-bell"></i>
                     <span class="badge">3</span>
                 </button>
-
                 <a href="#" class="nav-btn" title="الإعدادات">
-                    <i class="fas fa-cog"></i>
-                </a>
+                    <i class="fas fa-cog"></i> --}}
 
                 <a href="#" class="logout-btn"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -58,7 +54,6 @@
 
         <main class="main-content">
             <section class="hero">
-                {{-- مسافة بعد الفاصلة لتحسين الطباعة --}}
                 <h1>مرحباً بك، الأستاذة {{ auth()->user()->name }}</h1>
                 <p>نتمنى لك يوماً دراسياً مثمراً</p>
 
@@ -82,7 +77,6 @@
 
                 @php $firstQuiz = $recentQuizzes->first(); @endphp
                 @if ($firstQuiz)
-                    {{-- مرِّري الكائن مباشرة في حال وجود Route Model Binding --}}
                     <a href="{{ route('quizzes.results', $firstQuiz->id) }}" class="action-btn">
                         <i class="fas fa-poll"></i><span>نتائج الاختبار</span>
                     </a>
@@ -104,20 +98,17 @@
 
                     $firstAssignment = \App\Models\Assignment::query()
                         ->whereHas('lesson', function ($q) use ($teacherId, $userId) {
-                            // غطّي الحالتين:
                             $q->where(function ($qq) use ($teacherId, $userId) {
-                                // 1) لو lessons.teacher_id = teachers.id
                                 if ($teacherId) {
                                     $qq->orWhere('teacher_id', $teacherId);
                                 }
-                                // 2) لو lessons.teacher_id = users.id
                                 $qq->orWhere('teacher_id', $userId);
                             });
                         })
-                        ->first(); // لو وجد أول واجب
+                        ->first();
                 @endphp
 
-                @if ($firstAssignment)
+               {{-- -  @if ($firstAssignment)
                     <a href="{{ route('assignments.edit', $firstAssignment->id) }}" class="action-btn">
                         <i class="fas fa-edit"></i>
                         <span>تعديل الواجب</span>
@@ -127,11 +118,11 @@
                         <i class="fas fa-edit"></i>
                         <span>لا يوجد واجبات لتعديلها</span>
                     </button>
-                @endif
+                @endif--}}
 
-                <a href="{{ route('lessons.details') }}" class="action-btn">
+                <a href="{{ route('lessons.index') }}" class="action-btn">
                     <i class="fas fa-chalkboard-teacher"></i>
-                    <span>تفاصيل الدرس</span>
+                    <span> الدروس التعليمية</span>
                 </a>
             </section>
 
@@ -147,38 +138,30 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- الواجبات --}}
                         @foreach ($recentAssignments as $assignment)
                             <tr>
                                 <td>{{ optional($assignment->due_at)->format('d/m/Y') ?? '-' }}</td>
                                 <td><span class="activity-type homework">تسليم واجب</span></td>
                                 <td>
                                     واجب: {{ $assignment->title }}
-                                    —
-                                    {{-- نحذف تكرار كلمة "الصف n" من عنوان الدرس --}}
-                                    {{ trim(preg_replace('/\s*[-–—]?\s*الصف\s*\d+/u', '', $assignment->lesson->title ?? 'درس غير محدد')) }}
                                     — الصف {{ $assignment->lesson->grade ?? '-' }}
                                 </td>
                             </tr>
                         @endforeach
 
-                        {{-- الاختبارات --}}
                         @foreach ($recentQuizzes as $q)
                             <tr>
                                 <td>{{ optional($q->available_to)->format('d/m/Y') ?? '-' }}</td>
                                 <td><span class="activity-type exam">امتحان</span></td>
                                 <td>
                                     اختبار: {{ $q->title }}
-                                    —
-                                    {{ trim(preg_replace('/\s*[-–—]?\s*الصف\s*\d+/u', '', $q->lesson->title ?? 'درس غير محدد')) }}
-                                    - الصف {{ $q->lesson->grade ?? '-' }}
+                                    — الصف {{ $q->lesson->grade ?? '-' }}
                                 </td>
                             </tr>
                         @endforeach
 
 
 
-                        {{-- لو ما في أنشطة --}}
                         @if ($recentAssignments->isEmpty() && $recentQuizzes->isEmpty())
                             <tr>
                                 <td colspan="3" class="text-center">لا توجد أنشطة حديثة.</td>

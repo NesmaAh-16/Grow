@@ -27,7 +27,6 @@
     }
     .page-header h1{ margin:0; font-weight:800; color:#1e293b; }
 
-    /* بطاقة */
     .card{
       background:var(--card); border-radius:14px; box-shadow:0 10px 30px rgba(2,6,23,.08);
       padding:20px; margin-bottom:18px;
@@ -53,7 +52,6 @@
     .btn-primary:hover{ filter:brightness(1.02); box-shadow:0 10px 18px rgba(59,130,246,.28); }
     .btn-primary:active{ transform:translateY(1px); }
 
-    /* جدول الرسائل */
     .support-table{ width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; }
     .support-table th, .support-table td{
       padding:12px 12px; text-align:right; border-bottom:1px solid var(--line);
@@ -83,7 +81,6 @@
       font-weight:800; cursor:pointer;
     }
 
-    /* فورم الرد داخل الجدول */
     .reply-form{
       display:grid; grid-template-columns:1fr 170px 120px; gap:8px; margin-top:8px;
     }
@@ -107,7 +104,6 @@
 </head>
 <body>
   <div class="page-container">
-    {{-- نافبارك الحالية --}}
     <nav>
       <div class="nav-left">
         <a class="brand" href="{{ route('home') }}">
@@ -123,8 +119,12 @@
       </div>
 
       <div class="nav-right">
-        <button class="nav-btn" title="الإشعارات"><i class="fas fa-bell"></i><span class="badge">3</span></button>
-        <a href="#" class="nav-btn" title="الإعدادات"><i class="fas fa-cog"></i></a>
+                {{-- - <button class="nav-btn" title="الإشعارات">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <a href="#" class="nav-btn" title="الإعدادات">
+                    <i class="fas fa-cog"></i>--}}
         <a href="#" class="logout-btn"
            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
           <i class="fas fa-sign-out-alt"></i><span>تسجيل خروج</span>
@@ -138,7 +138,6 @@
         <h1>الدعم الفني</h1>
       </section>
 
-      {{-- رسائل النظام --}}
       @if (session('status'))
         <div class="card alert alert-success">{{ session('status') }}</div>
       @endif
@@ -150,7 +149,6 @@
         </div>
       @endif
 
-      {{-- فورم إنشاء رسالة دعم جديدة --}}
       <section class="card support-form">
         <h2 style="margin:0 0 10px; font-weight:800; color:#1f2937;">إرسال رسالة دعم</h2>
         <form method="POST" action="{{ route('support.store') }}" class="grid">
@@ -173,8 +171,37 @@
         </form>
       </section>
 
-      {{-- جدول الرسائل --}}
       <section class="card">
+        @php $isAdmin = auth()->user()->hasAnyRole(['admin','user-admin']); @endphp
+        @if($isAdmin)
+  <th style="width:250px;">إجراءات</th>
+@endif
+<tbody>
+@foreach ($messages as $msg)
+  <tr>
+    <td>{{ $msg->creator->name }}</td>
+    <td>{{ $msg->subject }}</td>
+    <td>{{ $msg->status }}</td>
+
+    @if($isAdmin)
+      <td>
+        <form action="{{ route('support.reply', $msg) }}" method="POST" class="reply-form">
+          @csrf
+          <textarea name="response">{{ $msg->response }}</textarea>
+          <select name="status">
+            <option value="answered">تم الرد</option>
+            <option value="open">مفتوحة</option>
+            <option value="closed">مغلقة</option>
+          </select>
+          <button class="btn-primary">حفظ</button>
+        </form>
+      </td>
+    @endif
+  </tr>
+@endforeach
+</tbody>
+
+
         <h2 style="margin:0 0 12px; font-weight:800; color:#1f2937;">الرسائل الواردة</h2>
 
         <table class="support-table">
@@ -217,7 +244,6 @@
                 </td>
 
                 <td>
-                  {{-- فورم الرد السريع --}}
                   <form method="POST" action="{{ route('support.reply', $msg) }}" class="reply-form">
                     @csrf
                     <textarea name="response" placeholder="اكتب الرد هنا..."></textarea>

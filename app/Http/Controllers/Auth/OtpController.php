@@ -21,13 +21,11 @@ class OtpController extends Controller
     {
         $data = $r->validate([
             'email' => 'required|email',
-            'code' => 'required', // سننظّفه يدويًا
+            'code' => 'required',
         ]);
 
         $email = trim(strtolower($data['email']));
         $key = 'pwdotp:' . sha1($email);
-
-        // نظّف الرمز من أي غير أرقام (يدعم العربية واللاتينية)
         $submitted = preg_replace('/\D/u', '', (string) $data['code']);
         \Log::info("OTP SUBMITTED {$email} => {$submitted}");
 
@@ -49,7 +47,7 @@ class OtpController extends Controller
 
         return redirect()->route('password.reset.custom', [
             'email' => $email,
-            'token' => $token,   // هذا هو التوكن الخام من Password::createToken($user)
+            'token' => $token,
         ]);
     }
 

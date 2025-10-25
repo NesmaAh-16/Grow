@@ -11,24 +11,37 @@ use Illuminate\Support\Str;
 class StudentsController extends Controller
 {
     public function index(Request $r)
-    {
-        // فلاتر بسيطة: بحث برقم الهوية/الاسم/الإيميل + تصفية حسب الحالة
-        $q = User::where('user_type', 'student')
-            ->when($r->filled('q'), function ($query) use ($r) {
-                $term = trim($r->q);
-                $query->where(function ($qq) use ($term) {
-                    $qq->where('national_id', 'like', "%{$term}%")
-                        ->orWhere('name', 'like', "%{$term}%")
-                        ->orWhere('email', 'like', "%{$term}%");
-                });
-            })
-            ->when($r->filled('status'), fn($query) => $query->where('status', $r->status))
-            ->latest();
+{
+    $q = \App\Models\User::query()
+        // اعتبر أي مستخدم طالبًا لو تحقّق واحد من الشروط الثلاثة
+        ->where(function ($qq) {
+            $qq->where('user_type', 'student')
+               ->orWhereHas('roles', fn($q) => $q->where('name', 'student'))
+               ->orWhereHas('studentProfile');
+        })
+        // البحث
+        ->when($r->filled('q'), function ($query) use ($r) {
+            $term = trim($r->q);
+            $query->where(function ($qq) use ($term) {
+                $qq->where('national_id', 'like', "%{$term}%")
+                   ->orWhere('name', 'like', "%{$term}%")
+                   ->orWhere('email', 'like', "%{$term}%");
+            });
+        })
+        // تصفية الحالة (اختياري)
+        ->when($r->filled('status'), fn($query) => $query->where('status', $r->status))
+        // أظهر المحذوفين لو بدّك
+        ->when($r->boolean('with_trashed'), fn($query) => $query->withTrashed())
+        ->with('studentProfile')
+        ->latest();
 
-        $students = $q->paginate(15)->withQueryString();
+    // اعرض عددًا كبيرًا دفعة واحدة
+    $perPage = (int) $r->get('per_page', 100);
 
-        return view('students-management', compact('students'));
-    }
+    $students = $q->paginate($perPage)->withQueryString();
+
+    return view('students-management', compact('students'));
+}
 
 
     public function show(User $user)
@@ -87,33 +100,37 @@ class StudentsController extends Controller
         return view('students-edit', compact('user', 'grade'));
     }
 
-    public function update(Request $request, User $user)
-    {
-        abort_unless($user->user_type === 'teacher', 404);
+   public function update(Request $request, User $user)
+{
+    abort_unless($user->user_type === 'student' || $user->hasRole('student') || $user->studentProfile, 404);
 
-        $data = $request->validate([
-            'name' => 'required|string|max:120',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'national_id' => 'nullable|string|max:64|unique:users,national_id,' . $user->id,
-            'status' => 'required|in:active,inactive,blocked,pending',
-            'specialty' => 'nullable|string|max:100',
-        ]);
+    $data = $request->validate([
+        'name'        => 'required|string|max:120',
+        'email'       => 'required|email|unique:users,email,' . $user->id,
+        'national_id' => 'nullable|string|max:64|unique:users,national_id,' . $user->id,
+        'status'      => 'required|in:active,inactive,blocked,pending',
+        'grade'       => 'nullable|string|max:50',
+    ]);
 
-        $user->update([
-            'name' => $data['name'],
-            'email' => $data['email'],
+    $user->update([
+        'name'        => $data['name'],
+        'email'       => $data['email'],
+        'national_id' => $data['national_id'] ?? null,
+        'status'      => $data['status'],
+        'user_type'   => 'student',
+    ]);
+
+    $user->studentProfile()->updateOrCreate(
+        [],
+        [
+            'grade'       => $data['grade'] ?? null,
             'national_id' => $data['national_id'] ?? null,
-            'status' => $data['status'],
-            'user_type' => 'teacher',
-        ]);
+        ]
+    );
 
-        $user->teacherProfile()->updateOrCreate([], [
-            'specialty' => $data['specialty'] ?? null,
-        ]);
+    return redirect()->route('user_admin.students')->with('ok', 'تم تعديل بيانات الطالب.');
+}
 
-        return redirect()->route('user_admin.teachers')
-            ->with('ok', 'تم تعديل بيانات المعلم.');
-    }
     public function activate(User $user)
     {
         abort_unless($user->user_type === 'student', 404);

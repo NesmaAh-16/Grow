@@ -1,145 +1,107 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الإعدادات</title>
-    <link rel="icon" href="assets/images/logo2-removebg-preview.png" type="image/x-icon" width = "15px">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset ('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css')}}" />
-    <link rel="stylesheet" href="{{ asset ('assets/css/student-setting.css')}}" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الإعدادات</title>
+
+  <link rel="icon" href="{{ asset('assets/images/logo2-removebg-preview.png') }}" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <style>
+    :root{
+      --ink:#0f2f72; --muted:#6b7280; --primary:#2563eb;
+      --card:#fff; --bg:#f5f8ff; --border:#e7edf8; --ok:#10b981; --danger:#dc2626;
+    }
+    *{box-sizing:border-box}
+    body{font-family:'Cairo',sans-serif;background:var(--bg);margin:0}
+    .page{max-width:1100px;margin:0 auto;padding:20px}
+    .nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+    .nav a{color:var(--ink);text-decoration:none;font-weight:700}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 6px 24px rgba(15,47,114,.06);padding:18px}
+    h1{margin:0 0 14px;color:var(--ink);font-weight:900}
+    label{display:block;font-weight:800;color:var(--ink);margin-bottom:6px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .full{grid-column:1 / -1}
+    input,select{
+      width:100%;background:#f7fbff;border:1px solid var(--border);
+      padding:.85rem 1rem;border-radius:12px;font-size:1rem;outline:none
+    }
+    input[readonly]{background:#f2f6ff;color:#6b7280}
+    .actions{display:flex;gap:10px;margin-top:10px}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:.8rem 1.2rem;border-radius:12px;border:1px solid transparent;cursor:pointer;font-weight:800}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover{filter:brightness(.98)}
+    .flash{border-radius:12px;padding:.85rem 1rem;margin:10px 0}
+    .ok{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46}
+    .err{background:#fff5f5;border:1px solid #fecaca;color:#991b1b}
+    @media (max-width:860px){ .row{grid-template-columns:1fr} }
+  </style>
 </head>
-
 <body>
-    <div class="page-container">
-        <nav class="navbar">
-            <div class="nav-left">
-                <a class="brand" href="{{ route('home') }}">
-                    <img class="logo" src="{{ asset ('assets/images/imageedit_2_6635233653.png')}}" alt="شعار المنصة" />
-                    <img class="brand-name" src="{{ asset ('assets/images/logomwhite.png')}}" alt="Grow" />
-                </a>
-            </div>
-            <div class="nav-menu">
-                <a href="{{ route('home') }}" class="nav-link">
-                    <i class="fas fa-home" style="margin-left: 8px"></i>
-                    الصفحة الرئيسية
-                </a>
+<div class="page">
 
-            </div>
-            <div class="nav-right">
-                <form method="POST" action="">
-                    @csrf
-                    <button class="nav-btn" href="#" title="الإشعارات">
-                        <i class="fas fa-bell"></i>
-                        <span class="badge">3</span>
-                    </button>
-                     </form>
-                    <a href="{{ route('student.dashboard') }}" class="nav-btn" title="الإعدادات">
-                        <i class="fas fa-cog"></i>
-                    </a>
-                    <a href="#" class="logout-btn"
-                        onclick ="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>تسجيل خروج</span>
-                    </a>
+  <div class="nav">
+    <a href="{{ route('home') }}"><i class="fa fa-home" style="margin-left:8px"></i>الصفحة الرئيسية</a>
+    <a href="{{ route('student.dashboard') }}"><i class="fa fa-chalkboard" style="margin-left:8px"></i>لوحة الطالب</a>
+  </div>
 
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none">
-                        @csrf
-                    </form>
-            </div>
-        </nav>
-        <main class="main-content">
-            <div class="settings-container">
-                <nav class="tabs-nav">
-                    <button class="tab-btn active" data-tab="profile">
-                        <i class="fas fa-user"></i>
-                        المعلومات الشخصية
-                    </button>
-                    <button class="tab-btn" data-tab="password">
-                        <i class="fas fa-lock"></i>
-                        تغيير كلمة المرور
-                    </button>
-                    <button class="tab-btn" data-tab="language">
-                        <i class="fas fa-globe"></i>
-                        اللغة والمنطقة
-                    </button>
-                </nav>
-
-                <div class="tab-content-area">
-                    <div class="tab-content">
-                        <div id="profile" class="tab-pane active">
-                            <h2>المعلومات الشخصية</h2>
-                            <div class="profile-pic-section">
-                                <img src="https://via.placeholder.com/120" alt="صورة الملف الشخصي" class="profile-pic">
-                                <span class="change-pic-btn">تغيير الصورة</span>
-                            </div>
-                            <div class="form-group">
-                                <label for="full-name">الاسم الكامل</label>
-                                <input type="text" id="full-name" class="form-input" value="عبدالله محمد" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="national-id">رقم الهوية</label>
-                                <input type="text" id="national-id" class="form-input" value="1012345678" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="birth-date">تاريخ الميلاد</label>
-                                <input type="date" id="birth-date" class="form-input" value="2010-05-15">
-                            </div>
-                            <div class="form-group">
-                                <label for="grade">الصف الدراسي</label>
-                                <input type="text" id="grade" class="form-input" value="الأول ثانوي" readonly>
-                            </div>
-                        </div>
-
-                        <div id="password" class="tab-pane">
-                            <h2>تغيير كلمة المرور</h2>
-                            <div class="form-group">
-                                <label for="current-password">كلمة المرور الحالية</label>
-                                <input type="password" id="current-password" class="form-input">
-                            </div>
-                            <div class="form-group">
-                                <label for="new-password">كلمة المرور الجديدة</label>
-                                <input type="password" id="new-password" class="form-input">
-                            </div>
-                            <div class="form-group">
-                                <label for="confirm-password">تأكيد كلمة المرور الجديدة</label>
-                                <input type="password" id="confirm-password" class="form-input">
-                            </div>
-                        </div>
-
-                        <div id="language" class="tab-pane">
-                            <h2>الغة والمنطقة</h2>
-                            <div class="form-group">
-                                <label for="interface-language">لغة الواجهة</label>
-                                <select id="interface-language" class="form-select">
-                                    <option value="ar" selected>العربية</option>
-                                    <option value="en">English</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="timezone">المنطقة الزمنية</label>
-                                <select id="timezone" class="form-select">
-                                    <option value="Asia/Riyadh" selected>(GMT+03:00) الرياض</option>
-                                    <option value="Asia/Dubai">(GMT+04:00) دبي</option>
-                                    <option value="Africa/Cairo">(GMT+02:00) القاهرة</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-actions">
-                        <button class="save-btn">
-                            <i class="fas fa-save"></i>
-                            حفظ التغييرات
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </main>
+  {{-- رسائل --}}
+  @if ($errors->any())
+    <div class="flash err">
+      <b>تحقّق من الحقول التالية:</b>
+      <ul style="margin:.4rem 0 0 0; padding-inline-start:18px">
+        @foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach
+      </ul>
     </div>
+  @endif
 
-    <script src="assets/js/std-settings.js"></script>
+  @if (session('success_profile'))
+    <div class="flash ok"><i class="fa fa-check-circle"></i> {{ session('success_profile') }}</div>
+  @endif
+
+  <section class="card">
+    <h1>المعلومات الشخصية</h1>
+
+    <form method="POST" action="{{ route('student.settings.profile') }}">
+      @csrf
+
+      <div class="row">
+        <div class="full">
+          <label>الاسم الكامل</label>
+          <input type="text" name="name" value="{{ old('name', $user->name) }}" required>
+        </div>
+
+        <div>
+          <label>رقم الهوية</label>
+          <input type="text" value="{{ $profile?->national_id ?? '—' }}" readonly>
+        </div>
+
+        <div>
+          <label>تاريخ الميلاد</label>
+          <input type="date" name="birth_date"
+       value="{{ old('birth_date', optional($profile->birth_date)->format('Y-m-d')) }}">
+        </div>
+
+        <div class="full">
+          <label>الصف الدراسي</label>
+          <select name="grade">
+            <option value="">— اختر الصف —</option>
+            @for ($i=1;$i<=12;$i++)
+              <option value="{{ $i }}" {{ (string)old('grade', $profile->grade ?? '') === (string)$i ? 'selected' : '' }}>
+                الصف {{ $i }}
+              </option>
+            @endfor
+          </select>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary"><i class="fa fa-save"></i> حفظ التغييرات</button>
+      </div>
+    </form>
+  </section>
+</div>
 </body>
-
 </html>

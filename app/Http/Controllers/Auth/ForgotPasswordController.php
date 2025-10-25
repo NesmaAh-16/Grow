@@ -12,7 +12,7 @@ class ForgotPasswordController extends Controller
 
     public function showEmailForm()
     {
-        return view('forget-pass'); //
+        return view('forget-pass'); 
     }
 
     public function sendOtp(Request $r)
@@ -33,7 +33,7 @@ class ForgotPasswordController extends Controller
         \Log::info("OTP SET {$email} = {$code}"); // تشخيص
         return redirect()->route('password.otp.show', ['email' => $email])
             ->with('status', 'تم إرسال رمز مكوّن من 6 أرقام إلى بريدك.');
-       
+
 
     }
 }

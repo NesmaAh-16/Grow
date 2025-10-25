@@ -1,4 +1,3 @@
-{{-- أعلى الصفحة: فلاش مسج --}}
 @if (session('ok'))
     <div class="alert"
         style="background:#e6ffed;border:1px solid #b4f8c8;padding:10px;border-radius:8px;color:#1a7f37;margin-bottom:10px">
@@ -148,8 +147,6 @@
                             @endforelse
                         </tbody>
                     </table>
-
-                    {{-- ترقيم الصفحات --}}
                     <div style="margin-top:12px;display:flex;justify-content:flex-end">
                         {{ $pending->links() }}
                     </div>
