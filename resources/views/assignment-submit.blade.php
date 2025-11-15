@@ -1,9 +1,4 @@
-@if ($errors->any())
-  <div class="alert" style="background:#fdecec;border:1px solid #f5c2c7;color:#b02a37;padding:10px;border-radius:10px;margin:12px">
-    <ul style="margin:0">@foreach ($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
-  </div>
-@endif
-
+{{-- resources/views/student/assignment-submit.blade.php --}}
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -20,7 +15,7 @@
     .dropzone{border:2px dashed #c7d2fe;border-radius:12px;padding:24px;text-align:center;color:#6b7280}
     .btn-primary{background:#2f54eb;color:#fff;border:none;border-radius:10px;padding:10px 14px;cursor:pointer}
     .btn-secondary{background:#f1f3f9;border:1px solid #e3e6ef;color:#333;border-radius:10px;padding:10px 14px;text-decoration:none}
-    .actions{display:flex;gap:10px;justify-content:flex-start;margin-top:12px}
+    .actions{display:flex;gap:10px;margin-top:12px}
     input[type=file]{display:none}
     label.file-btn{display:inline-block}
   </style>
@@ -50,7 +45,7 @@
 
         <div style="margin-top:12px">
           <label>ملاحظة (اختياري)</label>
-          <textarea name="note" class="input" style="width:100%;min-height:90px;border:1px solid #e3e6ef;border-radius:10px;padding:10px"></textarea>
+          <textarea name="note" style="width:100%;min-height:90px;border:1px solid #e3e6ef;border-radius:10px;padding:10px"></textarea>
         </div>
 
         <div class="actions">

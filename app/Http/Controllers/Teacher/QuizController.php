@@ -183,30 +183,5 @@ class QuizController extends Controller
             ->route('quizzes.index')
             ->with('ok', 'تم حذف الاختبار بنجاح.');
     }
-    public function attempt(\App\Models\Quiz $quiz)
-{
-    $quiz->load('questions:id,quiz_id,text,type,points,options');
-
-    $now = now();
-    $withinWindow =
-        (is_null($quiz->available_from) || $quiz->available_from <= $now) &&
-        (is_null($quiz->available_to)   || $quiz->available_to   >= $now);
-
-    if (!$withinWindow) {
-        return view('attempt-quiz', [
-            'quiz' => $quiz,
-            'durationMinutes' => $quiz->duration_minutes ?? 15,
-            'error' => 'خطأ: هذا الاختبار غير متاح حاليًا.'
-        ]);
-    }
-
-    return view('attempt-quiz', [
-        'quiz' => $quiz,
-        'durationMinutes' => $quiz->duration_minutes ?? 15,
-        'error' => null
-    ]);
-}
-
-    
 
 }

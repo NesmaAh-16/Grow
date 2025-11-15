@@ -13,17 +13,15 @@ class StudentQuizController extends Controller
         $quiz->load('questions:id,quiz_id,text,type,points,options');
 
         $now = now();
-        $isPublished = (bool) $quiz->published;
         $withinWindow =
-            (is_null($quiz->start_at) || $quiz->start_at <= $now) &&
-            (is_null($quiz->end_at)   || $quiz->end_at   >= $now);
+            (is_null($quiz->available_from) || $quiz->available_from <= $now) &&
+            (is_null($quiz->available_to)   || $quiz->available_to   >= $now);
 
-        if (!$isPublished || !$withinWindow) {
-            // نفس رسالة الخطأ في لقطة الشاشة
+        if (!$withinWindow) {
             return view('attempt-quiz', [
                 'quiz'            => $quiz,
                 'durationMinutes' => $quiz->duration_minutes ?? 15,
-                'error'           => 'خطأ: لا يوجد اختبار منشور حاليًا. الرجاء إنشاء اختبار أولاً من لوحة تحكم المعلم.',
+                'error'           => 'خطأ: هذا الاختبار غير متاح حاليًا.',
             ]);
         }
 
@@ -36,9 +34,7 @@ class StudentQuizController extends Controller
 
     public function submit(Request $request, Quiz $quiz)
     {
-        // استقبل answers[] واحسب الدرجة… (اتركها عندك إن كان موجود)
-        // placeholder:
-        // validate/grade/store attempt result…
+        // TODO: استقبل وقيّم الإجابات حسب نظامك
         return back()->with('ok', 'تم تسليم الاختبار.');
     }
 }

@@ -158,9 +158,34 @@
   </div>
 </section>
 @endif
+{{-- ===== اختبارات متاحة الآن ===== --}}
+@if(isset($availableQuizzes) && $availableQuizzes->isNotEmpty())
+<section class="quizzes-section">
+  <h2 class="section-title">اختبارات متاحة الآن</h2>
+  <div class="quizzes-grid">
+    @foreach ($availableQuizzes as $qz)
+      <div class="quiz-card">
+        <div class="quiz-card-head">
+          <h3 class="quiz-title">{{ $qz->title }}</h3>
+          <span class="quiz-subtitle">{{ $qz->lesson?->title ?? '—' }}</span>
+        </div>
+
+        <ul class="quiz-meta">
+          <li><i class="fa-regular fa-clock"></i> المدة: {{ $qz->duration_minutes ?? 15 }} دقيقة</li>
+          @if($qz->available_to)
+            <li><i class="fa-solid fa-hourglass-half"></i> ينتهي: {{ \Carbon\Carbon::parse($qz->available_to)->format('Y-m-d H:i') }}</li>
+          @endif
+        </ul>
+
+        <a class="btn btn-primary w-100" href="{{ route('quizzes.attempt', $qz->id) }}">ابدأ الآن</a>
+      </div>
+    @endforeach
+  </div>
+</section>
+@endif
 
 {{-- ===== اختبارات قادمة ===== --}}
-@if(!empty($upcomingQuizzes) && $upcomingQuizzes->count())
+@if(isset($upcomingQuizzes) && $upcomingQuizzes->isNotEmpty())
 <section class="quizzes-section" style="margin-top:20px">
   <h2 class="section-title">اختبارات قادمة</h2>
   <div class="quizzes-grid">
@@ -172,7 +197,7 @@
         </div>
 
         <ul class="quiz-meta">
-          <li><i class="fa-regular fa-calendar"></i> يبدأ: {{ \Carbon\Carbon::parse($qz->start_at)->format('Y-m-d H:i') }}</li>
+          <li><i class="fa-regular fa-calendar"></i> يبدأ: {{ \Carbon\Carbon::parse($qz->available_from)->format('Y-m-d H:i') }}</li>
           <li><i class="fa-regular fa-clock"></i> المدة: {{ $qz->duration_minutes ?? 15 }} دقيقة</li>
         </ul>
 
@@ -182,24 +207,16 @@
   </div>
 </section>
 @endif
-{{-- ===== الواجبات المتاحة الآن ===== --}}
+
+{{-- ===== الواجبات ===== --}}
 @if (Route::has('student.assignments.index'))
-    <section class="quizzes-section" style="margin-top:28px">
-        <h2 class="section-title">الواجبات المتاحة الآن</h2>
-
-        @php
-            // جلب سريع (لو ما بدك تنقل المنطق للداشبورد) — يُفضَّل الاعتماد على صفحة index
-            // الأفضل: اترك هذا العنوان ورابط "عرض الكل"، وخلي القائمة في صفحة مستقلة
-        @endphp
-
-        <div style="text-align:center;margin-bottom:10px">
-            <a href="{{ route('student.assignments.index') }}" class="btn btn-primary">
-                عرض كل الواجبات
-            </a>
-        </div>
-    </section>
+  <section class="quizzes-section" style="margin-top:28px">
+    <h2 class="section-title">الواجبات المتاحة الآن</h2>
+    <div style="text-align:center;margin-bottom:10px">
+      <a href="{{ route('student.assignments.index') }}" class="btn btn-primary">عرض كل الواجبات</a>
+    </div>
+  </section>
 @endif
-
 
             </div>
         </main>

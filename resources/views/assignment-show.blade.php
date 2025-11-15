@@ -1,14 +1,4 @@
-@if (session('ok'))
-  <div class="alert" style="background:#e6ffed;border:1px solid #b4f8c8;padding:10px;border-radius:8px;color:#1a7f37;margin:12px">
-    {{ session('ok') }}
-  </div>
-@endif
-@if ($errors->any())
-  <div class="alert" style="background:#fdecec;border:1px solid #f5c2c7;color:#b02a37;padding:10px;border-radius:10px;margin:12px">
-    <ul style="margin:0">@foreach ($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
-  </div>
-@endif
-
+{{-- resources/views/student/assignment-show.blade.php --}}
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -34,32 +24,16 @@
       <h1 class="title">واجب في درس: {{ $assignment->lesson?->title ?? '—' }}: <span style="color:#0a2a88">{{ $assignment->title }}</span></h1>
     </div>
     <div class="body">
-      <div class="row">
-        <div class="label">حالة التسليم</div>
-        <div>
-          @if($mySubmission)
-            <span style="color:#198754">تم التسليم</span>
-          @else
-            <span style="color:#b02a37">لم يتم التسليم</span>
-          @endif
-        </div>
+      <div class="row"><div class="label">حالة التسليم</div>
+        <div>@if($mySubmission)<span style="color:#198754">تم التسليم</span>@else<span style="color:#b02a37">لم يتم التسليم</span>@endif</div>
       </div>
       @if($assignment->published_at)
-      <div class="row">
-        <div class="label">تاريخ النشر</div>
-        <div>{{ \Carbon\Carbon::parse($assignment->published_at)->translatedFormat('l d F Y, h:i a') }}</div>
-      </div>
+        <div class="row"><div class="label">تاريخ النشر</div><div>{{ \Carbon\Carbon::parse($assignment->published_at)->translatedFormat('l d F Y, h:i a') }}</div></div>
       @endif
       @if($assignment->due_at)
-      <div class="row">
-        <div class="label">موعد التسليم</div>
-        <div>{{ \Carbon\Carbon::parse($assignment->due_at)->translatedFormat('l d F Y, h:i a') }}</div>
-      </div>
+        <div class="row"><div class="label">موعد التسليم</div><div>{{ \Carbon\Carbon::parse($assignment->due_at)->translatedFormat('l d F Y, h:i a') }}</div></div>
       @endif
-      <div class="row">
-        <div class="label">معلومات الواجب</div>
-        <div>{!! nl2br(e($assignment->instructions ?? '—')) !!}</div>
-      </div>
+      <div class="row"><div class="label">معلومات الواجب</div><div>{!! nl2br(e($assignment->instructions ?? '—')) !!}</div></div>
 
       <div style="padding-top:16px">
         @if($available)

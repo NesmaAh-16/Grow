@@ -25,6 +25,7 @@ use App\Http\Controllers\UserAdmin\ApprovalsController;
 use App\Http\Controllers\UserAdmin\DashboardController;
 use App\Http\Controllers\Admin\SystemSettingsController;
 use App\Http\Controllers\Student\StudentDashboardController;
+use App\Http\Controllers\Student\StudentAssignmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -107,7 +108,6 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
     Route::get('/assignments', [AssignmentController::class, 'index'])->name('assignments.index');
     Route::get('/assignments/create', [AssignmentController::class, 'create'])->name('assignments.create');
     Route::post('/assignments', [AssignmentController::class, 'store'])->name('assignments.store');
-
     Route::get('/assignments/{assignment}', [AssignmentController::class, 'show'])->name('assignments.show');
     Route::get('/assignments/{assignment}/edit', [AssignmentController::class, 'edit'])->name('assignments.edit');
     Route::put('/assignments/{assignment}', [AssignmentController::class, 'update'])->name('assignments.update');
@@ -116,12 +116,9 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
         '/assignments/{assignment}/attachments/{attachment}',
         [AttachmentController::class, 'destroy']
     )->name('assignments.attachments.destroy');
-
-
     Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
     Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create'); //first page quiz create
     Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
-
     Route::get('/quizzes/{quiz}/questions/createContinue', [QuestionController::class, 'createContinue'])
         ->whereNumber('quiz')
         ->name('quizzes.questions.createContinue');
@@ -129,15 +126,14 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
     Route::post('/quizzes/{quiz}/questions', [QuestionController::class, 'store'])
         ->whereNumber('quiz')
         ->name('quizzes.questions.store');
-    Route::get('/quizzes/{quiz}/edit', [\App\Http\Controllers\Teacher\QuizController::class, 'edit'])->name('quizzes.edit');
+    Route::get('/quizzes/{quiz}/edit', [QuizController::class, 'edit'])->name('quizzes.edit');
     Route::put('/quizzes/{quiz}', [QuizController::class, 'update'])->name('quizzes.update');
-    Route::delete('/quizzes/{quiz}', [\App\Http\Controllers\Teacher\QuizController::class, 'destroy'])->name('quizzes.destroy');
-    Route::get('/quizzes/{quiz}/attempt', [\App\Http\Controllers\Teacher\QuizController::class, 'attempt'])
+    Route::delete('/quizzes/{quiz}', [QuizController::class, 'destroy'])->name('quizzes.destroy');
+    Route::get('/quizzes/{quiz}/attempt', [QuizController::class, 'attempt'])
         ->whereNumber('quiz')->name('quizzes.attempt');
 
-    Route::post('/quizzes/{quiz}/attempt', [\App\Http\Controllers\Teacher\QuizController::class, 'submitAttempt'])
+    Route::post('/quizzes/{quiz}/attempt', [QuizController::class, 'submitAttempt'])
         ->whereNumber('quiz')->name('quizzes.attempt.submit');
-
     Route::get('/quizzes/{quiz}/results', [QuizController::class, 'results'])->name('quizzes.results');
     Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
 
@@ -163,12 +159,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/settings',              [SettingsController::class, 'index'])->name('settings');
         Route::post('/settings/profile',     [SettingsController::class, 'updateProfile'])->name('settings.profile');
     });
-    Route::middleware(['auth','role:student'])->prefix('student')->name('student.')->group(function () {
-    Route::get('/assignments', [StudentAssignmentController::class, 'index'])->name('assignments.index');
-    Route::get('/assignments/{assignment}', [StudentAssignmentController::class, 'show'])->name('assignments.show');
-    Route::get('/assignments/{assignment}/submit', [StudentAssignmentController::class, 'createSubmission'])->name('assignments.submit');
-    Route::post('/assignments/{assignment}/submit', [StudentAssignmentController::class, 'storeSubmission'])->name('assignments.submit.store');
-});
+
 
 });
 

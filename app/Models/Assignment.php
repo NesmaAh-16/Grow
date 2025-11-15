@@ -35,10 +35,5 @@ class Assignment extends Model
         if (!$this->due_at) return 'نشط';
         return $this->due_at->isPast() ? 'منتهي' : 'نشط';
     }
-    public function lesson() {
-    return $this->belongsTo(\App\Models\Lesson::class);
-}
-public function submissions() {
-    return $this->hasMany(\App\Models\AssignmentSubmission::class);
-}
+
 }
